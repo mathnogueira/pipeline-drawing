@@ -1,0 +1,23 @@
+doctype html
+html(lang="pt-br")
+	head
+		meta(charset="utf-8")
+		title MIPS Pipeline
+
+		// build:css style/components.css
+		link(rel="stylesheet", href="../bower_components/bootstrap/dist/css/bootstrap.css")
+		// endbuild
+
+
+		link(rel="stylesheet", href="style/style.css")
+	body
+		header
+			include _partials/header.pug
+		section
+			canvas#pipeline
+		footer
+			include _partials/footer.pug
+
+		script(src="../bower_components/fabric.js/dist/fabric.min.js")
+
+		script(src="js/app.js")

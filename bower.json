@@ -1,0 +1,21 @@
+{
+  "name": "arq2-pipeline",
+  "description": "Javascript program that receives some MIPS instructions and draw the pipeline execution",
+  "main": "index.js",
+  "authors": [
+    "Matheus Nogueira <matheus.nogueira2008@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/mathnogueira/pipeline-drawing",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "fabric.js": "fabric#^1.7.3"
+  }
+}
