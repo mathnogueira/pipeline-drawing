@@ -7,14 +7,27 @@ class PipelineTableComponent extends Component {
 	constructor() {
 		super(10, 10, 900, 400);
 		this.$$cicles = 20;
+		this.objects = [];
 	}
 
 	setCycles(numberCycles) {
 		this.$$cicles = numberCycles;
 	}
 
+	addStage(component) {
+		let built = component.build();
+		if (Array.isArray(built)) {
+			for (let i = 0; i < built.length; i++) {
+				console.log(built[i]);
+				this.objects.push(built[i]);
+			}
+		} else {
+			this.objects.push(built);
+		}
+	}
+
 	build() {
-		let objects = [];
+		let objects = this.objects;
 		// Desenha as linhas separadores do clock
 		this.drawClocks(this.$$cicles, objects);
 		this.drawInstructions(10, objects);
@@ -25,7 +38,6 @@ class PipelineTableComponent extends Component {
 			top: this.y,
 			left: this.x,
 		});
-		// return clockLines;
 	}
 
 	drawTableContent(objects) {
