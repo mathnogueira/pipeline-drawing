@@ -23,6 +23,8 @@ gulp watch ## Vigia todos os arquivos do projeto e compila somente os que você 
 ## Organização das pastas
 
 1) `src`: Pasta contendo todos os arquivos fonte;
+
 2) `build`: Pasta contendo os arquivos compilados (você testa esses aqui);
+
 3) `dist`: Pasta contendo os arquivos prontos para serem subidos em produção.
 
