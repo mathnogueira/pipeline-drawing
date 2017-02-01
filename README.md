@@ -61,8 +61,8 @@ Estrutura de uma `instruction`:
 // Instrução de ADD
 {
 	command: 'ADD.D $1, $2, $3', 	// Comando executado
-	start: 1,			// Número do ciclo que a instrução teve início,
-	executionCost: 4,		// Número de ciclos gasto na execução
+	start: 1,						// Número do ciclo que a instrução teve início,
+	executionCost: 4,				// Número de ciclos gasto na execução
 }
 ```
 
@@ -70,9 +70,9 @@ Estrutura de um `stall`:
 
 ```javascript
 {
-	instructionNumber: 2,		// Número da instrução que gerou a bolha
-	startCycle: 3,			// Número do ciclo (a partir do início da instrução) que a bolha foi gerada
-	numberCycles: 2,		// Número de bolhas geradas a partir do startCycle
+	instructionNumber: 2,			// Número da instrução que gerou a bolha
+	startCycle: 3,					// Número do ciclo (a partir do início da instrução) que a bolha foi gerada
+	numberCycles: 2,				// Número de bolhas geradas a partir do startCycle
 }
 ```
 
