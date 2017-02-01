@@ -6,19 +6,17 @@ class PipelineTableComponent extends Component {
 
 	constructor() {
 		super(10, 10, 900, 400);
-		this.$$cicles = 20;
+		this.$$cycles = 0;
 		this.objects = [];
-	}
-
-	setCycles(numberCycles) {
-		this.$$cicles = numberCycles;
+		this.currentInstruction = 0;
+		this.currentCycle = 0;
+		this.instructions = [];
 	}
 
 	addStage(component) {
 		let built = component.build();
 		if (Array.isArray(built)) {
 			for (let i = 0; i < built.length; i++) {
-				console.log(built[i]);
 				this.objects.push(built[i]);
 			}
 		} else {
@@ -26,10 +24,33 @@ class PipelineTableComponent extends Component {
 		}
 	}
 
+	addInstructionName(instruction) {
+		this.objects.push(instruction.createInstructionName(this.currentInstruction));
+	}
+
+	addInstruction(instruction) {
+		let stages = instruction.createStages();
+		for (let i = 0; i < stages.length; i++) {
+			stages[i].instruction = this.currentInstruction;
+			stages[i].cycle = this.currentCycle + i;
+			this.addStage(stages[i]);
+		}
+		this.addInstructionName(instruction);
+		this.currentInstruction++;
+		this.currentCycle++;
+
+		let totalAux = this.currentCycle + stages.length;
+		if (totalAux > this.$$cycles) {
+			this.$$cycles = totalAux;
+		}
+	}
+
 	build() {
+		this.width = 45 * (this.$$cycles-1);
+		console.log(this.width);
 		let objects = this.objects;
 		// Desenha as linhas separadores do clock
-		this.drawClocks(this.$$cicles, objects);
+		this.drawClocks(this.$$cycles, objects);
 		this.drawInstructions(10, objects);
 		this.drawTableHeaders(objects);
 		this.drawTableContent(objects);
@@ -87,16 +108,31 @@ class PipelineTableComponent extends Component {
 		objects.push(clockHolder);
 	}
 
-	drawClocks(numberClocks, lineArr) {
+	drawClocks(numberClocks, objects) {
 		let width = 45;
-		for (let i = 1; i < numberClocks; i++) {	
+		for (let i = 1; i < numberClocks; i++) {
+			console.log(i);
 			let line = new fabric.Line([0, 0, 0, this.height + 30], {
 				top: 0,
 				left: 120 + width * i,
 				stroke: "#888"
 			});
 
-			lineArr.push(line);
+			objects.push(line);
+		}
+
+		for (let i = 1; i < numberClocks; i++) {
+			let padded = i < 10 ? "0" + i : "" + i;
+			let text = new fabric.Textbox(padded, {
+				fontSize: 12,
+				top: 10,
+				left: 157 + 45 * (i-1),
+				height: 30,
+				width: 45,
+				originX: "center",
+			});
+
+			objects.push(text);
 		}
 	}
 

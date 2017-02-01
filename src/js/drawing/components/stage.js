@@ -10,6 +10,7 @@ class Stage extends Component {
 		this.instruction = instruction;
 		this.cycle = cycle;
 		this.text = text;
+		this.color = "#aaddaa";
 	}
 
 	build() {
@@ -20,7 +21,7 @@ class Stage extends Component {
 			strokeWidth: 2,
 			width: this.width,
 			height: this.height,
-			fill: "red",
+			fill: this.color,
 			evented: false,
 			selectable: false,
 		});
