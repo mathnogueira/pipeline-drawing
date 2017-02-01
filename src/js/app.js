@@ -3,6 +3,7 @@
 import Canvas from "./drawing/canvas";
 import PipelineTableComponent from "./drawing/components/pipeline-table.js";
 import Instruction from "./drawing/instruction.js";
+import ExecutionTable from "./core/execution-table.js";
 
 (function() {
 
@@ -53,6 +54,39 @@ import Instruction from "./drawing/instruction.js";
 		canvas.initialize();
 		canvas.add(pipeline);
 		canvas.render();
+
+
+		let executionTable = new ExecutionTable(false);
+		let addInstruction = {
+			start: 2,
+			destination: "F0",
+			operants: ["F1", "F2"],
+			isLoad: false,
+			isWrite: false,
+			executionCycles: 2
+		};
+
+		let divInstruction = {
+			start: 1,
+			destination: "F0",
+			operants: ["F1", "F2"],
+			isLoad: false,
+			isWrite: false,
+			executionCycles: 5
+		};
+
+		let subInstruction = {
+			start: 3,
+			destination: "F1",
+			operants: ["F0", "F2"],
+			isLoad: false,
+			isWrite: false,
+			executionCycles: 2
+		};
+
+		executionTable.execute(divInstruction);
+		executionTable.execute(addInstruction);
+		executionTable.execute(subInstruction);
 	}
 
 	function exportImage() {
