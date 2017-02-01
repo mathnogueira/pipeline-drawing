@@ -50,21 +50,6 @@ import Instruction from "./drawing/instruction.js";
 		pipeline.addInstruction(sub);
 		pipeline.addInstruction(div);
 		pipeline.addInstruction(mult);
-		// pipeline.addStage(new Stage("I", 0, 0));
-		// pipeline.addStage(new Stage("D", 0, 1));
-		// for (let i = 0; i < 7; i++) {
-		// 	pipeline.addStage(new Stage("m", 0, 2 + i));
-		// }
-		// pipeline.addStage(new Stage("M", 0, 9));
-		// pipeline.addStage(new Stage("W", 0, 10));
-
-		// pipeline.addStage(new Stage("I", 1, 1));
-		// pipeline.addStage(new Stage("D", 1, 2));
-		// for (let i = 0; i < 7; i++) {
-		// 	pipeline.addStage(new Stage("m", 1, 3 + i));
-		// }
-		// pipeline.addStage(new Stage("M", 1, 10));
-		// pipeline.addStage(new Stage("W", 1, 11));
 		canvas.initialize();
 		canvas.add(pipeline);
 		canvas.render();
