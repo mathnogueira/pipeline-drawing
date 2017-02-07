@@ -13,6 +13,7 @@
 	const useref	= require("gulp-useref");
 	const browserify= require("gulp-browserify");
 	const babelify 	= require("babelify");
+	const ts		= require("gulp-typescript");
 
 	gulp.task("build", build);
 	gulp.task("pug", compilarPug);
@@ -25,9 +26,10 @@
 	gulp.task("watch", ["watch-pug", "watch-less", "watch-js"]);
 	gulp.task("useref", executarUseref);
 	gulp.task("browserify", bundle);
+	gulp.task("typescript", compilarTypescript);
 
 	function build() {
-		sequence("pug", "less", "jshint", "browserify", "useref");
+		sequence("pug", "less", "jshint", "typescript", "useref");
 	}
 
 	function compilarPug() {
@@ -53,6 +55,17 @@
 			.pipe(jshint())
 			.pipe(jshint.reporter(stylish))
 			.pipe(jshint.reporter("fail"));
+	}
+
+	function compilarTypescript() {
+		let tsReturn = gulp
+			.src("src/ts/**/*.ts")
+			.pipe(debug())
+			.pipe(ts({
+				out: "app.js"
+			}));
+
+		return tsReturn.js.pipe(gulp.dest("build/js/"));
 	}
 
 	function transpilarJavascript() {
