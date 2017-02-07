@@ -1,12 +1,14 @@
+import { IUnit } from './IUnit';
 /**
  * Classe que controla a execução da pipeline e seus componentes internos. Considere essa classe como a unidade de controle do datapath.
  * 
  * @author Matheus Nogueira
  * @version 1.0
  */
-class Pipeline {
+class Pipeline implements IUnit {
 
 	private clock :number;
+	private instructions :any;
 
 	constructor() {
 		this.clock = 0;
