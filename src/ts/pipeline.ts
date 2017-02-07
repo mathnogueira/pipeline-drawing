@@ -6,7 +6,7 @@
  */
 class Pipeline {
 
-	private clock :Number;
+	private clock :number;
 
 	constructor() {
 		this.clock = 0;
@@ -18,6 +18,6 @@ class Pipeline {
 	 * 
 	 */
 	tick() :void {
-		
+		this.clock += 1;
 	}
 }
