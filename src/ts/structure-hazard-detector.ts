@@ -1,3 +1,4 @@
+import { IUnit } from './IUnit';
 import { StallException } from './stall';
 /**
  * Estrutura que detecta hazards estruturais no pipeline.
@@ -5,7 +6,7 @@ import { StallException } from './stall';
  * @author Matheus Nogueira
  * @version 1.0
  */
-export class StructureHazardDetector {
+export class StructureHazardDetector implements IUnit {
 
 	public defaultStructure: Object;
 	private structure: Object;

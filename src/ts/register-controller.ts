@@ -1,3 +1,4 @@
+import { IUnit } from './IUnit';
 import { Register, ERegisterState } from "./register"
 
 /**
@@ -7,7 +8,7 @@ import { Register, ERegisterState } from "./register"
  * @author Matheus Nogueira
  * @version 1.0
  */
-export default class RegisterController {
+export default class RegisterController implements IUnit {
 
 	private registers :Array<Register>;
 	private cycles: number[];
