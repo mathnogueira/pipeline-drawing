@@ -4,6 +4,14 @@ export enum EInstructionType {
 	BRANCH = 3
 }
 
+export enum EStage {
+	IF = 1,
+	ID = 2,
+	EX = 3,
+	MEM = 4,
+	WB = 5
+}
+
 export abstract class Instruction {
 
 	public name: string;
