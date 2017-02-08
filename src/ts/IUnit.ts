@@ -1,4 +1,5 @@
-import { Instruction } from './instructions/instruction';
+import { RegisterController } from './register-controller';
+
 
 /**
  * Interface que representa qualquer unidade que trabalha com ciclos de clock.
@@ -17,5 +18,5 @@ export interface IUnit {
  * @version 1.0
  */
 export interface IFunctionalUnit extends IUnit {
-	execute(instruction? :Instruction) :void;
+	execute(regController?: RegisterController) :void;
 }

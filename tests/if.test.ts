@@ -11,9 +11,10 @@ class IFUnitTest {
 	@test("should spill the next instruction when a tick is given")
 	getInstructionFromTick() {
 		let registers = new PipelineRegisters();
-		let unit: IFunctionalUnit = new IFUnit(registers);
 		let instruction: Instruction = new MemoryInstruction("sw r0 0(r2)");
-		unit.execute(instruction);
+		registers.INSTRUCTIONS = [instruction];
+		let unit: IFunctionalUnit = new IFUnit(registers);
+		unit.execute();
 		unit.tick();
 		if (registers.IF_ID["instruction"] !== instruction) {
 			throw new Error("IF should set instruction inside IF/ID register after a tick");

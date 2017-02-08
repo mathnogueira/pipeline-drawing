@@ -1,5 +1,7 @@
+import { StallException } from '../stall';
+import { RegisterController } from '../register-controller';
 import { PipelineRegisters } from '../pipeline-register';
-import { Instruction } from '../instructions/instruction';
+import { Instruction, InstructionDelay } from '../instructions/instruction';
 import { FunctionalUnit } from './base';
 
 /**
@@ -17,13 +19,19 @@ export class IDUnit extends FunctionalUnit {
 		super(registers.IF_ID, registers.ID_EX);
 	}
 
-	public execute(instruction? : Instruction): void {
+	public execute(regController?: RegisterController): void {
 		this.currentInstruction = this.input["instruction"];
 	}
 
 	public tick(cycle: number): void {
-		this.output["rd"] = this.currentInstruction.detinationRegister;
-		this.output["rs"] = this.currentInstruction.operants[0];
-		this.output["rt"] = this.currentInstruction.operants[1];
+		if (this.currentInstruction) {
+			let operants = this.currentInstruction.operants;
+			this.output["rd"] = this.currentInstruction.detinationRegister;
+			if (operants.length > 0)
+				this.output["rs"] = this.currentInstruction.operants[0];
+			if (operants.length > 1)
+				this.output["rt"] = this.currentInstruction.operants[1];
+			this.output["cost"] = InstructionDelay[this.currentInstruction.name];
+		}
 	}
 }

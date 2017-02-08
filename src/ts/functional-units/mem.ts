@@ -4,27 +4,26 @@ import { Instruction } from '../instructions/instruction';
 import { FunctionalUnit } from './base';
 
 /**
- * Unidade funcional que recupera a proxima instrução a ser executada.
+ * Unidade funcional que decodifica a instrução a ser utilizada.
  * 
  * @author Matheus Nogueira
  * @version 1.0
  */
-export class IFUnit extends FunctionalUnit {
+export class MemUnit extends FunctionalUnit {
 	protected input: Object;
 	protected output: Object;
 	private currentInstruction: Instruction;
-	private pc: number;
+	private rd: string;
 
 	constructor(registers: PipelineRegisters) {
-		super(registers.INSTRUCTIONS, registers.IF_ID);
-		this.pc = 0;
+		super(registers.EX_MEM, registers.MEM_WB);
 	}
 
 	public execute(regController?: RegisterController): void {
-		this.currentInstruction = this.input[this.pc++];
+		this.rd = this.input["rd"];
 	}
 
 	public tick(cycle: number): void {
-		this.output["instruction"] = this.currentInstruction;
+		this.output["rd"] = this.rd;
 	}
 }

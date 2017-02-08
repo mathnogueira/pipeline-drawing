@@ -1,3 +1,4 @@
+import { FunctionalUnit } from './functional-units/base';
 import { PipelineRegisters } from './pipeline-register';
 import { StructureHazardDetector } from './structure-hazard-detector';
 import { StallException } from './stall';
@@ -32,10 +33,32 @@ class Pipeline implements IUnit {
 
 	run() :void {
 		let cycle: number = 0;
+		let instructionConfig: Object = new Object();
+		instructionConfig["finished"] = 0;
+		instructionConfig["total"] = 5;
 		let max = 10;
-		while (cycle < max) {
+		let registers: PipelineRegisters = new PipelineRegisters();
+		while (instructionConfig["finished"] < instructionConfig["total"]) {
 			try {
+				let ifUnit = this.structureHazardDetector.useStructure("if", 1);
+				let idUnit = this.structureHazardDetector.useStructure("id", 1);
+				let memUnit = this.structureHazardDetector.useStructure("mem", 1);
+				let wbUnit = this.structureHazardDetector.useStructure("wb", 1);
+				let exUnit = this.structureHazardDetector.useStructure("asdasd", 213);
 				
+				ifUnit.execute();
+				idUnit.execute();
+				exUnit.execute();
+				memUnit.execute();
+				wbUnit.execute();
+
+				ifUnit.tick();
+				idUnit.tick();
+				exUnit.tick();
+				memUnit.tick();
+				wbUnit.tick();
+				this.structureHazardDetector.tick();
+				instructionConfig["finished"]++;
 			} catch (error) {
 				if (error instanceof StallException) {
 					// Bolha na pipeline, portanto, deve parar a execução.

@@ -1,3 +1,6 @@
+import { FunctionalUnit } from './functional-units/base';
+import { WBUnit } from './functional-units/wb';
+import { MemUnit } from './functional-units/mem';
 import { PipelineRegisters } from './pipeline-register';
 import { EXunit } from './functional-units/ex';
 import { IFUnit } from './functional-units/if';
@@ -49,8 +52,8 @@ export class StructureHazardDetector implements IUnit {
 		// Cria as unidades funcionais
 		this.units["if"] = new IFUnit(registers);
 		this.units["id"] = new IDUnit(registers);
-		this.units["mem"] = null;
-		this.units["wb"] = null;
+		this.units["mem"] = new MemUnit(registers);
+		this.units["wb"] = new WBUnit(registers);
 
 		this.units["fp_add"] = new EXunit(registers);
 		this.units["fp_mult"] = new EXunit(registers);
@@ -67,10 +70,10 @@ export class StructureHazardDetector implements IUnit {
 	 * 
 	 * @param {string} structureName nome da estrutura que será usada.
 	 * @param {number} cycles numero de ciclos em que a unidade estará ocupada.
-	 * @return {IUnit} unidade que será usada.
+	 * @return {FunctionalUnit} unidade que será usada.
 	 * @throws {Error} quando a unidade não estiver disponível para o uso.
 	 */
-	useStructure(structureName: string, cycles: number = 1) :IUnit {
+	useStructure(structureName: string, cycles: number = 1) :FunctionalUnit {
 		if (this.structure[structureName] === 0) {
 			throw new StallException();
 		}

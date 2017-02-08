@@ -1,3 +1,4 @@
+import { RegisterController } from '../register-controller';
 import { Instruction } from '../instructions/instruction';
 import { IFunctionalUnit } from '../IUnit';
 
@@ -18,7 +19,7 @@ export abstract class FunctionalUnit implements IFunctionalUnit {
 		this.output = output;
 	}
 
-	public abstract execute(instruction? : Instruction): void;
+	public abstract execute(regController?: RegisterController): void;
 
 	public abstract tick(cycle?: number) :void;
 }
