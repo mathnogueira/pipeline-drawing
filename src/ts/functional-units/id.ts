@@ -1,3 +1,4 @@
+import { PipelineRegisters } from '../pipeline-register';
 import { Instruction } from '../instructions/instruction';
 import { FunctionalUnit } from './base';
 
@@ -11,6 +12,10 @@ export class IDUnit extends FunctionalUnit {
 	protected input: Object;
 	protected output: Object;
 	private currentInstruction: Instruction;
+
+	constructor(registers: PipelineRegisters) {
+		super(registers.IF_ID, registers.ID_EX);
+	}
 
 	public execute(instruction? : Instruction): void {
 		this.currentInstruction = this.input["instruction"];

@@ -14,9 +14,9 @@ export class MemoryInstruction extends Instruction {
 
 	private getOperants(args: Array<string>) :Array<string> {
 		let operants = new Array<string>();
-		operants.push(args[1]);
 		let rs = args[2].slice(args[2].indexOf("(") + 1).replace(")", "");
 		operants.push(rs);
+		operants.push(args[1]);
 
 		return operants;
 	}
