@@ -1,5 +1,9 @@
+import { PipelineRegisters } from './pipeline-register';
+import { StructureHazardDetector } from './structure-hazard-detector';
 import { StallException } from './stall';
 import { IUnit } from './IUnit';
+import { RegisterController } from "./register-controller";
+
 /**
  * Classe que controla a execução da pipeline e seus componentes internos. Considere essa classe como a unidade de controle do datapath.
  * 
@@ -10,6 +14,8 @@ class Pipeline implements IUnit {
 
 	private clock :number;
 	private instructions :any;
+	private structureHazardDetector: StructureHazardDetector;
+	private dataHazardDetector: RegisterController;
 
 	constructor() {
 		this.clock = 0;
@@ -29,7 +35,7 @@ class Pipeline implements IUnit {
 		let max = 10;
 		while (cycle < max) {
 			try {
-
+				
 			} catch (error) {
 				if (error instanceof StallException) {
 					// Bolha na pipeline, portanto, deve parar a execução.

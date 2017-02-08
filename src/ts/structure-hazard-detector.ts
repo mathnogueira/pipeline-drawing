@@ -1,3 +1,7 @@
+import { PipelineRegisters } from './pipeline-register';
+import { EXunit } from './functional-units/ex';
+import { IFUnit } from './functional-units/if';
+import { IDUnit } from './functional-units/id';
 import { IUnit } from './IUnit';
 import { StallException } from './stall';
 /**
@@ -10,14 +14,18 @@ export class StructureHazardDetector implements IUnit {
 
 	public defaultStructure: Object;
 	private structure: Object;
+	private units: Object;
 	private cycles: Array<Array<number>>;
 
 	/**
 	 * Constroi a unidade de detecção de conflitos estruturais.
+	 * 
+	 * @param {PipelineRegisters} registers registradores da pipeline.
 	 */
-	constructor() {
+	constructor(registers: PipelineRegisters) {
 		this.defaultStructure = new Object();
 		this.cycles = new Array<Array<number>>();
+		this.units = new Object();
 		// Inicializa o numero de estruturas para cada 
 		// Estruturas basicas
 		this.defaultStructure["if"] = 1;
@@ -37,6 +45,20 @@ export class StructureHazardDetector implements IUnit {
 
 		// Faz uma cópia do array para a estrutura
 		this.structure = JSON.parse(JSON.stringify(this.defaultStructure));
+
+		// Cria as unidades funcionais
+		this.units["if"] = new IFUnit(registers);
+		this.units["id"] = new IDUnit(registers);
+		this.units["mem"] = null;
+		this.units["wb"] = null;
+
+		this.units["fp_add"] = new EXunit(registers);
+		this.units["fp_mult"] = new EXunit(registers);
+		this.units["fp_div"] = new EXunit(registers);
+
+		this.units["int_add"] = new EXunit(registers);
+		this.units["int_mult"] = new EXunit(registers);
+		this.units["int_div"] = new EXunit(registers);
 	}
 
 	/**
@@ -45,9 +67,10 @@ export class StructureHazardDetector implements IUnit {
 	 * 
 	 * @param {string} structureName nome da estrutura que será usada.
 	 * @param {number} cycles numero de ciclos em que a unidade estará ocupada.
+	 * @return {IUnit} unidade que será usada.
 	 * @throws {Error} quando a unidade não estiver disponível para o uso.
 	 */
-	useStructure(structureName: string, cycles: number = 1) :void {
+	useStructure(structureName: string, cycles: number = 1) :IUnit {
 		if (this.structure[structureName] === 0) {
 			throw new StallException();
 		}
@@ -56,6 +79,7 @@ export class StructureHazardDetector implements IUnit {
 		}
 		this.structure[structureName] -= 1;
 		this.cycles[structureName].push(cycles);
+		return this.units[structureName];
 	}
 
 	/**

@@ -1,5 +1,5 @@
 import { suite, test } from "mocha-typescript";
-import RegisterController from "../src/ts/register-controller";
+import { RegisterController } from "../src/ts/register-controller";
 
 @suite("RegisterController")
 class RegisterControllerSuite {

@@ -1,3 +1,4 @@
+import { PipelineRegisters } from '../src/ts/pipeline-register';
 import { StallException } from '../src/ts/stall';
 import { suite, test } from "mocha-typescript";
 import { StructureHazardDetector } from "../src/ts/structure-hazard-detector";
@@ -7,13 +8,13 @@ class StructureHazardDetectorTest {
 
 	@test("Should not cause a stall when an unit is free")
 	unitIsFree() {
-		let detector = new StructureHazardDetector();
+		let detector = new StructureHazardDetector(new PipelineRegisters());
 		detector.useStructure("id");
 	}
 
 	@test("Should cause stall if unit is under use")
 	unitIsBusy() {
-		let detector = new StructureHazardDetector();
+		let detector = new StructureHazardDetector(new PipelineRegisters());
 		detector.useStructure("id");
 		try {
 			for (let i: number = 0; i < detector.defaultStructure["id"]; i++) {
@@ -28,7 +29,7 @@ class StructureHazardDetectorTest {
 
 	@test("Should not let the unit be available for 2 cycles")
 	unitIsBusyFor2Cycles() {
-		let detector = new StructureHazardDetector();
+		let detector = new StructureHazardDetector(new PipelineRegisters());
 		let numberStalls: number = 0;
 		for (let i: number = 0; i < detector.defaultStructure["id"]; i++) {
 			detector.useStructure("id", 2);
