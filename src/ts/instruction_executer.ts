@@ -1,3 +1,4 @@
+import { StallException } from './stall';
 import { FunctionalUnit } from './functional-units/base';
 import { EStage, Instruction } from './instructions/instruction';
 import { StructureHazardDetector } from './structure-hazard-detector';
@@ -23,7 +24,7 @@ export class InstructionExecuter {
 
 	tick() {
 		let stage: EStage = this.currentInstruction.stage;
-		let unit: FunctionalUnit;
+		let unit: FunctionalUnit = null;
 		switch(stage) {
 			case EStage.IF:
 				unit = this.structureController.useStructure("if", 1);
@@ -38,6 +39,8 @@ export class InstructionExecuter {
 					unit = this.structureController.useStructure(this.currentInstruction.exUnit, this.currentInstruction.delay);
 					this.cyclesLeft = this.currentInstruction.delay;
 				}
+				// tenta ler os operandos
+				this.executeInstruction();
 				this.cyclesLeft--;
 				if (this.cyclesLeft === 0) {
 					this.currentInstruction.stage = EStage.MEM;
@@ -54,6 +57,21 @@ export class InstructionExecuter {
 				break;
 		}
 		this.currentInstruction.tick();
+		if (unit)
+			unit.tick();
+	}
+
+	executeInstruction() {
+		// tenta ler os operandos fonte
+		for (let i = 0; i < this.currentInstruction.operants.length; i++) {
+			if (!this.regController.isReadable(this.currentInstruction.operants[i])) {
+				// Tem que soltar uma bolha ou tentar o adiantamento.
+				// bolha
+				throw new StallException();
+			}
+		}
+		// Reserva o rd por delay + 1 ciclos (ex + mem)
+		this.regController.write(this.currentInstruction.detinationRegister, this.currentInstruction.delay + 1);
 	}
 
 }
