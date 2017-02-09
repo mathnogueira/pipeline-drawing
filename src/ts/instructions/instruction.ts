@@ -1,3 +1,4 @@
+import { IUnit } from '../IUnit';
 export enum EInstructionType {
 	REGISTER = 1,
 	MEMORY = 2,
@@ -9,23 +10,33 @@ export enum EStage {
 	ID = 2,
 	EX = 3,
 	MEM = 4,
-	WB = 5
+	WB = 5,
+	FINISHED = 6
 }
 
-export abstract class Instruction {
+export abstract class Instruction implements IUnit {
 
 	public name: string;
 	public detinationRegister: string;
 	public operants: Array<string>;
 	public type: EInstructionType;
+	public exUnit: string;
+	public delay: number;
+	public stage: EStage;
 
 	constructor(statement: string) {
 		let splited: Array<string> = statement.split(" ");
 		this.name = splited[0];
 		this.retrieveRegisters(splited);
+		this.stage = EStage.IF;
+		this.delay = InstructionDelay[this.name];
 	}
 
 	protected abstract retrieveRegisters(args: Array<string>) :void;
+
+	public tick() :void {
+		
+	}
 
 }
 

@@ -5,6 +5,7 @@ export class MemoryInstruction extends Instruction {
 	constructor(statement: string) {
 		super(statement);
 		this.type = EInstructionType.MEMORY;
+		this.exUnit = "int_add";
 	}
 
 	protected retrieveRegisters(args: Array<string>) :void {
