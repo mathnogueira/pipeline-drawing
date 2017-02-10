@@ -102,7 +102,7 @@
 
 	function bundle() {
 		return gulp
-			.src(["src/out/pipeline.js"])
+			.src(["src/out/app.js"])
 			.pipe(browserify({
 				transform: [["babelify"]]
 			}))

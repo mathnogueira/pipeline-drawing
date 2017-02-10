@@ -1,17 +1,16 @@
-"use strict";
-
-import Canvas from "./drawing/canvas";
-import PipelineTableComponent from "./drawing/components/pipeline-table.js";
-import Instruction from "./drawing/instruction.js";
-import ExecutionTable from "./core/execution-table.js";
+import {Canvas} from "./drawing/canvas";
+import {PipelineTableComponent} from "./drawing/components/pipeline-table.js";
+import {Instruction} from "./drawing/instruction";
+import {Pipeline} from "./pipeline";
 
 (function() {
 
 	// Inicializa o projeto quando a página estiver carregada.
 	window.onload = init;
-	window.exportImage = exportImage;
+	window["exportImage"] = exportImage;
 
 	let canvas;
+	let pipeline = new Pipeline();
 
 	function init() {
 		let pipeline = new PipelineTableComponent();
@@ -56,7 +55,6 @@ import ExecutionTable from "./core/execution-table.js";
 		canvas.render();
 
 
-		let executionTable = new ExecutionTable(false);
 		let addInstruction = {
 			start: 2,
 			destination: "F0",
@@ -83,10 +81,6 @@ import ExecutionTable from "./core/execution-table.js";
 			isWrite: false,
 			executionCycles: 2
 		};
-
-		executionTable.execute(divInstruction);
-		executionTable.execute(addInstruction);
-		executionTable.execute(subInstruction);
 	}
 
 	function exportImage() {
