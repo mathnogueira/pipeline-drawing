@@ -21,10 +21,11 @@ export class IFUnit extends FunctionalUnit {
 	}
 
 	public execute(regController?: RegisterController): void {
-		this.currentInstruction = this.input[this.pc++];
+		this.currentInstruction = this.input[this.pc];
 	}
 
 	public tick(cycle: number): void {
 		this.output["instruction"] = this.currentInstruction;
+		this.pc++;
 	}
 }

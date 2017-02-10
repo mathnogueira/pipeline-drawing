@@ -173,7 +173,12 @@ class InstructionExecuterTest {
 		InstructionDelay.mult = 3;
 		InstructionDelay.subi = 2;
 		InstructionDelay.div = 20;
+		let inst1 = InstructionFactory.build("mult r0 r1 r2");
+		let inst2 = InstructionFactory.build("subi r2 r0 r1");
+		let inst3 = InstructionFactory.build("div r0 r2 r0");
+
 		let pregs: PipelineRegisters = new PipelineRegisters();
+		pregs.INSTRUCTIONS = [inst1, inst2, inst3];
 		let reg: RegisterController = new RegisterController();
 		let haz: StructureHazardDetector = new StructureHazardDetector(pregs);
 		let ex1: InstructionExecuter = new InstructionExecuter(reg, haz);
@@ -181,24 +186,28 @@ class InstructionExecuterTest {
 		let ex3: InstructionExecuter = new InstructionExecuter(reg, haz);
 		let stalls: number = 0;
 
-		let inst1 = InstructionFactory.build("mult r0 r1 r2");
-		let inst2 = InstructionFactory.build("subi r2 r0 r1");
-		let inst3 = InstructionFactory.build("div r0 r2 r0");
-
 		ex1.setInstruction(inst1);
 		ex2.setInstruction(inst2);
 		ex3.setInstruction(inst3);
+
 
 		// ciclo 1 (IF)
 		ex1.tick(1);
 		reg.tick();
 		haz.tick();
 
+		console.log(pregs.ID_EX);
+		console.log(pregs.EX_MEM);
+		
+
 		// ciclo 2 (ID/IF)
 		ex1.tick(2);
 		ex2.tick(2);
 		reg.tick();
 		haz.tick();
+
+		console.log(pregs.ID_EX);
+		console.log(pregs.EX_MEM);
 
 		// ciclo 3 (EX/ID)
 		ex1.tick(3);
@@ -207,8 +216,11 @@ class InstructionExecuterTest {
 		reg.tick();
 		haz.tick();
 
+		console.log(pregs.ID_EX);
+		console.log(pregs.EX_MEM);
+
 		// ciclo 4 (EX/EX) ==> Tem que dar conflito!!
-		for (let i = 0; i < 100; i++) {
+		for (let i = 0; i < 30; i++) {
 			try {
 				ex1.tick(4 + i);
 				ex2.tick(4 + i);
@@ -218,6 +230,8 @@ class InstructionExecuterTest {
 			} finally {
 				reg.tick();
 				haz.tick();
+				console.log(pregs.ID_EX);
+				console.log(pregs.EX_MEM);
 			}
 		}
 

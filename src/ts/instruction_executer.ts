@@ -11,6 +11,7 @@ export class InstructionExecuter {
 	private free: boolean;
 	private cyclesLeft: number = -1;
 	private rdReserved: string = null;
+	private unit: FunctionalUnit;
 
 	constructor(regController: RegisterController, hazardDetector: StructureHazardDetector) {
 		this.regController = regController;
@@ -25,22 +26,21 @@ export class InstructionExecuter {
 
 	tick(cycle?: number) {
 		let stage: EStage = this.currentInstruction.stage;
-		let unit: FunctionalUnit = null;
 		switch(stage) {
 			case EStage.IF:
 				this.currentInstruction.output["if"] = cycle;
-				unit = this.structureController.useStructure("if", 1);
+				this.unit = this.structureController.useStructure("if", 1);
 				this.currentInstruction.stage = EStage.ID;
 				break;
 			case EStage.ID:
 				this.currentInstruction.output["id"] = cycle;
-				unit = this.structureController.useStructure("id", 1);
+				this.unit = this.structureController.useStructure("id", 1);
 				this.currentInstruction.stage = EStage.EX;
 				break;
 			case EStage.EX:
 				if (this.cyclesLeft === -1) {
 					this.currentInstruction.output["ex"] = cycle;
-					unit = this.structureController.useStructure(this.currentInstruction.exUnit, this.currentInstruction.delay);
+					this.unit = this.structureController.useStructure(this.currentInstruction.exUnit, this.currentInstruction.delay);
 					this.cyclesLeft = this.currentInstruction.delay;
 				}
 				try {
@@ -57,19 +57,22 @@ export class InstructionExecuter {
 				break;
 			case EStage.MEM:
 				this.currentInstruction.output["mem"] = cycle;
-				unit = this.structureController.useStructure("mem", 1);
+				this.unit = this.structureController.useStructure("mem", 1);
 				this.currentInstruction.stage = EStage.WB;
 				break;
 			case EStage.WB:
 				this.currentInstruction.output["wb"] = cycle;
-				unit = this.structureController.useStructure("wb", 1);
+				this.unit = this.structureController.useStructure("wb", 1);
 				this.currentInstruction.stage = EStage.FINISHED;
 				this.free = true;
 				break;
 		}
 		this.currentInstruction.tick();
-		if (unit)
-			unit.tick();
+		if (this.unit) {
+			this.unit.execute();
+			this.unit.tick();
+			console.log(cycle);
+		}
 	}
 
 	executeInstruction() {
