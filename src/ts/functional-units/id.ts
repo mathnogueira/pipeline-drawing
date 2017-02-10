@@ -32,6 +32,11 @@ export class IDUnit extends FunctionalUnit {
 			if (operants.length > 1)
 				this.output["rt"] = this.currentInstruction.operants[1];
 			this.output["cost"] = InstructionDelay[this.currentInstruction.name];
+		} else {
+			this.output["rd"] = "";
+			this.output["rs"] = "";
+			this.output["rt"] = "";
+			this.output["cost"] = 0;
 		}
 	}
 }

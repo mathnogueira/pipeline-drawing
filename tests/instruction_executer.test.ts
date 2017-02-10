@@ -195,9 +195,6 @@ class InstructionExecuterTest {
 		ex1.tick(1);
 		reg.tick();
 		haz.tick();
-
-		console.log(pregs.ID_EX);
-		console.log(pregs.EX_MEM);
 		
 
 		// ciclo 2 (ID/IF)
@@ -206,18 +203,12 @@ class InstructionExecuterTest {
 		reg.tick();
 		haz.tick();
 
-		console.log(pregs.ID_EX);
-		console.log(pregs.EX_MEM);
-
 		// ciclo 3 (EX/ID)
 		ex1.tick(3);
 		ex2.tick(3);
 		ex3.tick(3);
 		reg.tick();
 		haz.tick();
-
-		console.log(pregs.ID_EX);
-		console.log(pregs.EX_MEM);
 
 		// ciclo 4 (EX/EX) ==> Tem que dar conflito!!
 		for (let i = 0; i < 30; i++) {
@@ -230,8 +221,6 @@ class InstructionExecuterTest {
 			} finally {
 				reg.tick();
 				haz.tick();
-				console.log(pregs.ID_EX);
-				console.log(pregs.EX_MEM);
 			}
 		}
 

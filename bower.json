@@ -16,6 +16,7 @@
   ],
   "dependencies": {
     "bootstrap": "^3.3.7",
-    "fabric.js": "fabric#^1.7.3"
+    "fabric.js": "fabric#^1.7.3",
+    "systemjs": "*"
   }
 }

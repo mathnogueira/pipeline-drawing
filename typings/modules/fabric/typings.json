@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/df8ef42bab7e8b53a5454c8dae95a2bb38bc89b6/fabric/index.d.ts",
+    "raw": "registry:dt/fabric#1.5.0+20170107205036",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/df8ef42bab7e8b53a5454c8dae95a2bb38bc89b6/fabric/index.d.ts"
+  }
+}

@@ -1,0 +1,320 @@
+
+> arq2-pipeline@1.0.0 test /home/matheus/Programming/http/pipeline
+> tsc -p . && mocha "build/tests/**/*.test.js"
+
+
+
+  ID Unit
+    ✓ should set R0, R1 and R2 into rd, rs, rt respectively
+    ✓ should set rt and rs as r4 r8 respectively
+
+  IF Unit
+    ✓ should spill the next instruction when a tick is given
+
+  InstructionExecuter
+undefined
+undefined
+undefined
+CICLOS: ===============  -1
+undefined
+undefined
+CICLOS: ===============  -2
+undefined
+CICLOS: ===============  -3
+undefined
+CICLOS: ===============  -4
+undefined
+CICLOS: ===============  -5
+undefined
+CICLOS: ===============  -6
+undefined
+CICLOS: ===============  -7
+undefined
+undefined
+CICLOS: ===============  -8
+undefined
+    ✓ should have 6 stalls
+undefined
+undefined
+undefined
+CICLOS: ===============  -1
+undefined
+undefined
+CICLOS: ===============  -2
+undefined
+CICLOS: ===============  -3
+undefined
+undefined
+    ✓ Should have data hazard
+1
+2
+2
+CICLOS: ===============  -1
+3
+3
+CICLOS: ===============  -2
+4
+CICLOS: ===============  -3
+5
+6
+7
+CICLOS: ===============  -1
+7
+8
+CICLOS: ===============  -2
+8
+9
+9
+10
+10
+11
+11
+12
+12
+13
+13
+    ✓ should detect correct cycle for each unit
+1
+{}
+{}
+{}
+2
+2
+{ rd: 'r0', rs: 'r1', rt: 'r2', cost: 3 }
+{}
+{}
+CICLOS: ===============  2
+3
+3
+3
+{ rd: 'r2', rs: 'r0', rt: 'r1', cost: 2 }
+{}
+{}
+CICLOS: ===============  1
+4
+{ rd: 'r2', rs: 'r0', rt: 'r1', cost: 2 }
+{}
+{}
+CICLOS: ===============  0
+5
+{ rd: 'r2', rs: 'r0', rt: 'r1', cost: 2 }
+{ rd: 'r0' }
+{}
+6
+{ rd: 'r2', rs: 'r0', rt: 'r1', cost: 2 }
+{ rd: 'r0' }
+{ rd: 'r0' }
+7
+CICLOS: ===============  1
+7
+7
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r0' }
+{ rd: 'r0' }
+8
+CICLOS: ===============  0
+8
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r0' }
+9
+9
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r2' }
+10
+10
+CICLOS: ===============  19
+10
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r2' }
+11
+11
+CICLOS: ===============  18
+11
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r2' }
+12
+12
+CICLOS: ===============  17
+12
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r2' }
+13
+13
+CICLOS: ===============  16
+13
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r2' }
+14
+14
+CICLOS: ===============  15
+14
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r2' }
+15
+15
+CICLOS: ===============  14
+15
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r2' }
+16
+16
+CICLOS: ===============  13
+16
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r2' }
+17
+17
+CICLOS: ===============  12
+17
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r2' }
+18
+18
+CICLOS: ===============  11
+18
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r2' }
+19
+19
+CICLOS: ===============  10
+19
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r2' }
+20
+20
+CICLOS: ===============  9
+20
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r2' }
+21
+21
+CICLOS: ===============  8
+21
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r2' }
+22
+22
+CICLOS: ===============  7
+22
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r2' }
+23
+23
+CICLOS: ===============  6
+23
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r2' }
+24
+24
+CICLOS: ===============  5
+24
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r2' }
+25
+25
+CICLOS: ===============  4
+25
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r2' }
+26
+26
+CICLOS: ===============  3
+26
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r2' }
+27
+27
+CICLOS: ===============  2
+27
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r2' }
+28
+28
+CICLOS: ===============  1
+28
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r2' }
+{ rd: 'r2' }
+29
+29
+CICLOS: ===============  0
+29
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r0' }
+{ rd: 'r2' }
+30
+30
+30
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r0' }
+{ rd: 'r0' }
+31
+31
+31
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r0' }
+{ rd: 'r0' }
+32
+32
+32
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r0' }
+{ rd: 'r0' }
+33
+33
+33
+{ rd: 'r0', rs: 'r2', rt: 'r0', cost: 20 }
+{ rd: 'r0' }
+{ rd: 'r0' }
+    ✓ should detect correct cycle for each unit for 3 instructions
+
+  BranchInstruction
+    ✓ it should get r2 and r5 as operants
+    ✓ it should get r7 operant
+    ✓ it should get null as destination
+
+  Instruction
+    ✓ should have delay = 3
+
+  MemoryInstruction
+    ✓ it should get r0 and r2 as operants
+    ✓ it should get null as destination
+
+  RegisterInstruction
+    ✓ it should get r4 and r5 as operants
+    ✓ it should get r2 as destination
+
+  RegisterController
+    ✓ Should let F0 be used because it is not busy
+    ✓ Should not let F0 be used because it is busy
+    ✓ Should let F0 be used after 2 cycles
+    ✓ Should let F2 be used after a clock tick even if it never was used before
+
+  StructureHazardDetector
+    ✓ Should not cause a stall when an unit is free
+    ✓ Should cause stall if unit is under use
+    ✓ Should not let the unit be available for 2 cycles
+
+
+  22 passing (73ms)
+

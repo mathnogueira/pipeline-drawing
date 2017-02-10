@@ -25,11 +25,13 @@
 	gulp.task("watch-js", vigiarJs);
 	gulp.task("watch", ["watch-pug", "watch-less", "watch-js"]);
 	gulp.task("useref", executarUseref);
-	gulp.task("browserify", bundle);
+	gulp.task("browserify", runBundle);
+	gulp.task("bundleTs", bundleTs);
+	gulp.task("bundle", bundle);
 	gulp.task("typescript", compilarTypescript);
 
 	function build() {
-		sequence("pug", "less", "jshint", "typescript", "useref");
+		sequence("pug", "less", "typescript", "useref", "browserify");
 	}
 
 	function compilarPug() {
@@ -62,18 +64,19 @@
 			.src("src/ts/**/*.ts")
 			.pipe(debug())
 			.pipe(ts({
-				out: "app.js"
+				// out: "core.js",
+				module: "es2015",
 			}));
 
-		return tsReturn.js.pipe(gulp.dest("build/js/"));
+		return tsReturn.js.pipe(gulp.dest("src/out/"));
 	}
 
 	function transpilarJavascript() {
 		return gulp
-			.src("src/**/*.js")
+			.src("src/out/**/*.js")
 			.pipe(debug())
 			.pipe(babel())
-			.pipe(gulp.dest("build"));
+			.pipe(gulp.dest("src/out/"));
 	}
 
 	function vigiarPug() {
@@ -99,11 +102,25 @@
 
 	function bundle() {
 		return gulp
-			.src("src/js/app.js")
+			.src(["src/out/pipeline.js"])
 			.pipe(browserify({
 				transform: [["babelify"]]
 			}))
 			.pipe(gulp.dest("build/js/"));
+	}
+
+	function bundleTs() {
+		return gulp
+			.src(["src/ts/**/*.ts"])
+			.pipe(browserify({
+				extensions: "js",
+				transform: [["deamdify"]]
+			}))
+			.pipe(gulp.dest("build/js/"));
+	}
+
+	function runBundle() {
+		sequence("bundle");
 	}
 
 })();

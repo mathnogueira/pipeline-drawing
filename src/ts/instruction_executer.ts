@@ -9,7 +9,7 @@ export class InstructionExecuter {
 	private regController: RegisterController;
 	private structureController: StructureHazardDetector;
 	private pipelineRegisters: PipelineRegisters;
-	private currentInstruction: Instruction;
+	public currentInstruction: Instruction;
 	private free: boolean;
 	private cyclesLeft: number = -1;
 	private rdReserved: string = null;
@@ -50,10 +50,13 @@ export class InstructionExecuter {
 					// tenta ler os operandos
 					this.executeInstruction();
 				} catch (e) {
-					this.currentInstruction.output["ex"] = cycle+1;
+					// Nao executou nenhum ciclo ainda
+					if (this.cyclesLeft == this.currentInstruction.delay)
+						this.currentInstruction.output["ex"] = cycle+1;
 					throw e;
 				}
 				this.cyclesLeft--;
+				console.log("No ciclo", cycle, "faltam", this.cyclesLeft, "para terminar a instrucao", this.currentInstruction.name);
 				if (this.cyclesLeft === 0) {
 					this.currentInstruction.stage = EStage.MEM;
 				}
@@ -74,28 +77,37 @@ export class InstructionExecuter {
 		if (this.unit) {
 			this.unit.execute();
 			this.unit.tick();
-			console.log(cycle);
 		}
 	}
 
 	executeInstruction() {
 		// tenta ler os operandos fonte
 		for (let i = 0; i < this.currentInstruction.operants.length; i++) {
-			if (!this.regController.isReadable(this.currentInstruction.operants[i]) &&
-				 this.currentInstruction.operants[i] != this.rdReserved) {
-				// Tem que soltar uma bolha ou tentar o adiantamento.
-				// ADIANTAMENTO:
-				// USAR O this.pipelineRegisters para verificar quais registradores
-				// estao em qual etapa da execucao. Aplicar o algoritmo do slide.
-				// bolha
-				throw new StallException();
+			let operant = this.currentInstruction.operants[i];
+			// Se o registrador estiver sob uso.
+			if (!this.regController.isReadable(operant)) {
+				// A instrucao atual nao esta usando o registrador como RD
+				let currentExecuter = this.regController.getExecutingInstruction(operant);
+				if (currentExecuter != this.currentInstruction && 
+					currentExecuter.dispatchedCycle < this.currentInstruction.dispatchedCycle) {
+				// if(operant != this.rdReserved) {
+					// Tem que soltar uma bolha ou tentar o adiantamento.
+					// ADIANTAMENTO:
+					// USAR O this.pipelineRegisters para verificar quais registradores
+					// estao em qual etapa da execucao. Aplicar o algoritmo do slide.
+					// bolha
+					throw new StallException("conflito de dados no " + operant);
+				}
 			}
 		}
 		if (!this.rdReserved) {
 			// Reserva o rd por delay + 1 ciclos (ex + mem)
-			this.regController.write(this.currentInstruction.detinationRegister, this.currentInstruction.delay + 1);
+			this.regController.write(this.currentInstruction.detinationRegister, this.currentInstruction.delay + 1, this.currentInstruction);
 			this.rdReserved = this.currentInstruction.detinationRegister;
 		}
 	}
 
+	haveFinished() {
+		return this.free;
+	}
 }

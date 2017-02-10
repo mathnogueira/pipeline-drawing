@@ -75,7 +75,7 @@ export class StructureHazardDetector implements IUnit {
 	 */
 	useStructure(structureName: string, cycles: number = 1) :FunctionalUnit {
 		if (this.structure[structureName] === 0) {
-			throw new StallException();
+			throw new StallException('conflito estrutural na ' + structureName);
 		}
 		if (this.cycles[structureName] === undefined) {
 			this.cycles[structureName] = new Array<number>();

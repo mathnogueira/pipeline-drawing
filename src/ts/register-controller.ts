@@ -1,3 +1,4 @@
+import { Instruction } from './instructions/instruction';
 import { IUnit } from './IUnit';
 import { Register, ERegisterState } from "./register"
 
@@ -12,10 +13,12 @@ export class RegisterController implements IUnit {
 
 	private registers :Array<Register>;
 	private cycles: number[];
+	private instructions: Object;
 
 	constructor() {
 		this.registers = new Array<Register>();
 		this.cycles = new Array<number>();
+		this.instructions = new Object();
 	}
 
 	/**
@@ -34,11 +37,17 @@ export class RegisterController implements IUnit {
 	 * 
 	 * @param {string} registerName nome do registrador.
 	 * @param {Number} busyCycles número de ciclos em que o registrador estará ocupado.
+	 * @param {Instruction} instruction quem reservou o registrador
 	 */
-	write(registerName: string, busyCycles: Number) :void {
+	write(registerName: string, busyCycles: Number, instruction?: Instruction) :void {
 		let register = this.getRegister(registerName);
 		register.setState(ERegisterState.BUSY);
 		this.cycles[registerName] = busyCycles;
+		this.instructions[registerName] = instruction;
+	}
+
+	getExecutingInstruction(registerName): Instruction {
+		return this.instructions[registerName];
 	}
 
 	/**

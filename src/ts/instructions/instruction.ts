@@ -14,7 +14,7 @@ export enum EStage {
 	FINISHED = 6
 }
 
-export abstract class Instruction implements IUnit {
+export abstract class Instruction {
 
 	public name: string;
 	public detinationRegister: string;
@@ -24,6 +24,7 @@ export abstract class Instruction implements IUnit {
 	public delay: number;
 	public stage: EStage;
 	public output: Object;
+	public dispatchedCycle: number;
 
 	constructor(statement: string) {
 		let splited: Array<string> = statement.split(" ");
