@@ -23,6 +23,7 @@ export abstract class Instruction implements IUnit {
 	public exUnit: string;
 	public delay: number;
 	public stage: EStage;
+	public output: Object;
 
 	constructor(statement: string) {
 		let splited: Array<string> = statement.split(" ");
@@ -30,6 +31,7 @@ export abstract class Instruction implements IUnit {
 		this.retrieveRegisters(splited);
 		this.stage = EStage.IF;
 		this.delay = InstructionDelay[this.name];
+		this.output = new Object();
 	}
 
 	protected abstract retrieveRegisters(args: Array<string>) :void;
