@@ -1,3 +1,4 @@
+import { PipelineRegisters } from './pipeline-register';
 import { StallException } from './stall';
 import { FunctionalUnit } from './functional-units/base';
 import { EStage, Instruction } from './instructions/instruction';
@@ -7,15 +8,17 @@ export class InstructionExecuter {
 
 	private regController: RegisterController;
 	private structureController: StructureHazardDetector;
+	private pipelineRegisters: PipelineRegisters;
 	private currentInstruction: Instruction;
 	private free: boolean;
 	private cyclesLeft: number = -1;
 	private rdReserved: string = null;
 	private unit: FunctionalUnit;
 
-	constructor(regController: RegisterController, hazardDetector: StructureHazardDetector) {
+	constructor(regController: RegisterController, hazardDetector: StructureHazardDetector, pipelineRegisters?:PipelineRegisters) {
 		this.regController = regController;
 		this.structureController = hazardDetector;
+		this.pipelineRegisters = pipelineRegisters;
 		this.free = true;
 	}
 
@@ -81,6 +84,9 @@ export class InstructionExecuter {
 			if (!this.regController.isReadable(this.currentInstruction.operants[i]) &&
 				 this.currentInstruction.operants[i] != this.rdReserved) {
 				// Tem que soltar uma bolha ou tentar o adiantamento.
+				// ADIANTAMENTO:
+				// USAR O this.pipelineRegisters para verificar quais registradores
+				// estao em qual etapa da execucao. Aplicar o algoritmo do slide.
 				// bolha
 				throw new StallException();
 			}
