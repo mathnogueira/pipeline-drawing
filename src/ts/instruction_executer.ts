@@ -47,13 +47,10 @@ export class InstructionExecuter {
 					// tenta ler os operandos
 					this.executeInstruction();
 				} catch (e) {
-					console.log(e);
-					console.log('conflito no ciclo', cycle);
 					this.currentInstruction.output["ex"] = cycle+1;
 					throw e;
 				}
 				this.cyclesLeft--;
-				console.log(cycle, this.cyclesLeft);
 				if (this.cyclesLeft === 0) {
 					this.currentInstruction.stage = EStage.MEM;
 				}

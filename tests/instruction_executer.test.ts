@@ -221,9 +221,6 @@ class InstructionExecuterTest {
 			}
 		}
 
-		console.log(inst1.output);
-		console.log(inst2.output);
-		console.log(inst3.output);
 		if (inst1.output["if"] != 1) throw new Error("if of inst1 should be 1");
 		if (inst2.output["if"] != 2) throw new Error("if of inst2 should be 2");
 		if (inst1.output["id"] != 2) throw new Error("id of inst1 should be 2");
