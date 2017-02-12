@@ -18,12 +18,21 @@ import {Pipeline} from "./pipeline";
 			"div r1 r6 r7",
 			"lw r6 0(r7)",
 			"subi r1 r1 1",
-			"mult r2 r2 r1"
+			"mult r2 r2 r1",
+			"subi r1 r1 1",
+			"subi r1 r1 1",
+			"subi r1 r1 1",
 		];
 		let pipelineExecutor = new Pipeline(textInstructions);
 		let parsedInstructions = pipelineExecutor.run();
-		let pipeline = new PipelineTableComponent();
-		canvas = new Canvas("pipeline", 3000, 450);
+		let maxCycles: number = 0;
+		for (let i: number = 0; i < parsedInstructions.length; i++) {
+			let lastCycle = parsedInstructions[i]["wb"];
+			if (lastCycle > maxCycles)
+				maxCycles = lastCycle;
+		}
+		let pipeline = new PipelineTableComponent(maxCycles, parsedInstructions.length);
+		canvas = new Canvas("pipeline", pipeline.width + 140, pipeline.height + 45);
 		//DRAW STALLS FIRST
 		// for(var i = 0; i < parsedInstructions.length; i++){
 		// 	let stalls = new Instruction({
@@ -40,7 +49,6 @@ import {Pipeline} from "./pipeline";
 				unit: "integer"
 			});
 
-			console.log(parsedInstructions[i]);
 			pipeline.addInstruction(instruction);
 		}
 
@@ -54,7 +62,6 @@ import {Pipeline} from "./pipeline";
 		// 		structure: parsedInstructions[i]
 
 		// 	});
-		// 	console.log(parsedInstructions[i]);
 		// 	pipeline.addInstruction(inst);
 		// }
 		canvas.initialize();

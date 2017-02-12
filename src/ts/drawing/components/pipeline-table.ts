@@ -16,9 +16,15 @@ export class PipelineTableComponent extends Component {
 	public height;
 	public x;
 	public y;
+	private cycles: number;
+	private numberInstructions: number;
 
-	constructor() {
-		super(10, 10, 900, 400);
+	constructor(cycles, instructions) {
+		let height = instructions * 40;
+		let width = cycles * 45;
+		super(10, 10, width, height);
+		this.numberInstructions = instructions;
+		this.cycles = cycles;
 		this.$$cycles = 0;
 		this.objects = [];
 		this.currentInstruction = 0;
@@ -57,12 +63,10 @@ export class PipelineTableComponent extends Component {
 				let nextStage = order[order.indexOf(key)+1];
 				let lastCycle: number = instruction.execution[nextStage] || firstCycle;
 				let currentCycle: number = firstCycle-1;
-				console.log(currentCycle, "<", lastCycle);
 				while (currentCycle < lastCycle) {
 					let stage: Stage;
 					if (instruction.execution["stalls"].indexOf(currentCycle+1) < 0) {
 						stage = new Stage(labels[key], this.currentInstruction, currentCycle);
-						console.log(key);
 					} else {
 						stage = new Stall(this.currentInstruction, currentCycle);
 					}
@@ -83,12 +87,10 @@ export class PipelineTableComponent extends Component {
 	}
 
 	build() {
-		this.width = 45 * (this.$$cycles-1);
-		console.log(this.width);
 		let objects = this.objects;
 		// Desenha as linhas separadores do clock
-		this.drawClocks(this.$$cycles, objects);
-		this.drawInstructions(10, objects);
+		this.drawClocks(this.cycles + 1, objects);
+		this.drawInstructions(this.numberInstructions, objects);
 		this.drawTableHeaders(objects);
 		this.drawTableContent(objects);
 
@@ -148,7 +150,6 @@ export class PipelineTableComponent extends Component {
 	private drawClocks(numberClocks, objects) {
 		let width = 45;
 		for (let i = 1; i < numberClocks; i++) {
-			console.log(i);
 			let line = new fabric.Line([0, 0, 0, this.height + 30], {
 				top: 0,
 				left: 120 + width * i,
@@ -174,7 +175,8 @@ export class PipelineTableComponent extends Component {
 	}
 
 	private drawInstructions(numberInstructions, arr) {
-		let height = this.height / numberInstructions;
+		// let height = this.height / numberInstructions;
+		let height = 40;
 		for (let i = 1; i < numberInstructions; i++) {
 			let line = new fabric.Line([0, 0, this.width + 120, 0], {
 				top: 30 + height * i,
