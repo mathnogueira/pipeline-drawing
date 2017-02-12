@@ -1,1 +1,30 @@
-h1 Header
+.col-md-12
+	.pull-right
+		a(ng-click="app.toggleConfig()", href="") 
+			span(ng-hide="app.showConfig") Abrir
+			span(ng-show="app.showConfig") Fechar
+			|  configurações avançadas
+.col-md-12(ng-show="app.showConfig")
+	.col-md-5
+		h3.text-center Informe as latências em forma de tabela
+		table.table.table-striped.table-bordered
+			thead
+				th Instrução
+				th Latência
+				th
+			tbody
+				tr(ng-repeat="instrucao in app.latencias")
+					td {{instrucao.nome}}
+					td(style="max-width: 100px") 
+						span(ng-hide="app.edicaoLatencia[instrucao.nome]") {{instrucao.latencia}}
+						input.form-control.input-sm(ng-model="app.auxLatencias[instrucao.nome]", ng-show="app.edicaoLatencia[instrucao.nome]")
+					td
+						a(href="", ng-click="app.editarLatencia(instrucao)", ng-hide="app.edicaoLatencia[instrucao.nome]") Editar
+						a(href="", ng-click="app.aplicarLatencia(instrucao)", ng-show="app.edicaoLatencia[instrucao.nome]") Aplicar
+		.pull-right.btn-holder
+			button.btn.btn-default(ng-click="app.exportJSON()") Exportar JSON
+	.col-md-offset-2.col-md-5
+		h3.text-center Informe as latências como JSON
+		textarea.form-control(ng-model="app.latenciaJson")
+		.pull-right.btn-holder
+			button.btn.btn-default(ng-click="app.importJSON()") Importar JSON

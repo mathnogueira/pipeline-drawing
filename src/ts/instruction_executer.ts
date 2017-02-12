@@ -56,7 +56,6 @@ export class InstructionExecuter {
 					throw e;
 				}
 				this.cyclesLeft--;
-				console.log("No ciclo", cycle, "faltam", this.cyclesLeft, "para terminar a instrucao", this.currentInstruction.name);
 				if (this.cyclesLeft === 0) {
 					this.currentInstruction.stage = EStage.MEM;
 				}
@@ -82,7 +81,6 @@ export class InstructionExecuter {
 
 	executeInstruction() {
 		// tenta ler os operandos fonte
-		console.log(this.currentInstruction);
 		for (let i = 0; i < this.currentInstruction.operants.length; i++) {
 			let operant = this.currentInstruction.operants[i];
 			// Se o registrador estiver sob uso.

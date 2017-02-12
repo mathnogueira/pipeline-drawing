@@ -57,33 +57,14 @@ export class Pipeline implements IUnit {
 		this.executers.sort(function(a, b) {
 			return a.currentInstruction.dispatchedCycle - a.currentInstruction.dispatchedCycle;
 		});
-		// let stalls = [];
-		// for (let i: number = 0; i < this.executers.length; i++) {
-		// 	try {
-		// 		let canExecute: boolean = true;
-		// 		for (let j = 0; j < stalls.length; j++) {
-		// 			if (this.executers[i].currentInstruction.dispatchedCycle > stalls[j])
-		// 				canExecute = false;
-		// 		}
-		// 		if (canExecute)
-		// 			this.executers[i].tick(this.clock);
-		// 	} catch (e) {
-		// 		console.log(e.message, this.clock);
-		// 		stalls.push(this.executers[i].currentInstruction.dispatchedCycle);
-		// 	}
-		// }
 		let i: number = 0;
 		try {
 			for (; i < this.executers.length; i++) {
 				let executer = this.executers[i];
 				executer.tick(this.clock);
-				// if (executer.haveFinished()) {
-				// 	this.executers.splice(i, 1);
-				// }
 			}
 		} catch (e) {
 			for (; i < this.executers.length; i++) {
-				// console.log(this.executers[i].currentInstruction.name);
 				this.executers[i].currentInstruction.stalls.push(this.clock);
 			}
 		}
