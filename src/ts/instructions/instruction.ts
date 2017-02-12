@@ -25,6 +25,7 @@ export abstract class Instruction {
 	public stage: EStage;
 	public output: Object;
 	public dispatchedCycle: number;
+	public stalls: Array<number>;
 
 	constructor(statement: string) {
 		let splited: Array<string> = statement.split(" ");
@@ -33,12 +34,20 @@ export abstract class Instruction {
 		this.stage = EStage.IF;
 		this.delay = InstructionDelay[this.name];
 		this.output = new Object();
+		this.stalls = new Array<number>();
 	}
 
 	protected abstract retrieveRegisters(args: Array<string>) :void;
 
 	public tick() :void {
 		
+	}
+
+	public getOutput() :Object {
+		let output = JSON.parse(JSON.stringify(this.output));
+		output["stalls"] = this.stalls;
+
+		return output;
 	}
 
 }

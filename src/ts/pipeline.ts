@@ -75,9 +75,9 @@ export class Pipeline implements IUnit {
 			}
 		} catch (e) {
 			for (; i < this.executers.length; i++) {
-				console.log(this.executers[i].currentInstruction.name);
+				// console.log(this.executers[i].currentInstruction.name);
+				this.executers[i].currentInstruction.stalls.push(this.clock);
 			}
-			console.log('asdasd');
 		}
 	}
 
@@ -92,7 +92,7 @@ export class Pipeline implements IUnit {
 		// Output
 		let output = [];
 		for (let i: number = 0; i < this.registers.INSTRUCTIONS.length; i++) {
-			output.push(this.registers.INSTRUCTIONS[i].output);
+			output.push(this.registers.INSTRUCTIONS[i].getOutput());
 		}
 
 		return output;

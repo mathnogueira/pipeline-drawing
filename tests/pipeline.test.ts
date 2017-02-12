@@ -26,7 +26,7 @@ class PipelineTest {
 		}
 
 		let pipeline: Pipeline = new Pipeline(instructions);
-		pipeline.run();
+		console.log(pipeline.run());
 	}
 
 }
