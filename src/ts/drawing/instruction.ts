@@ -10,13 +10,15 @@ export class Instruction {
 	public stalls;
 	public unit;
 	public exLabel;
+	public structure;
 
-	constructor(options) {
+	constructor(options?: any) {
 		this.text = options.instruction;
 		this.execution = options.numberExecutions;
 		this.stalls = options.stalls || [];
 		this.unit = options.unit;
 		this.exLabel = options.executionLabel || "X";
+		this.structure = options.structure;
 	}
 
 	createStages() {
@@ -25,6 +27,17 @@ export class Instruction {
 		return stages;
 	}
 
+	createStalls(){
+		let stalls = this.newStalls();
+		return stalls;
+	}
+	newStalls(){
+		let stalls = []
+		for (let i = 0; i < this.stalls.length; i++) {
+			stalls[this.stalls[i]] = new Stall("S");
+		}
+		return stalls;
+	}
 	createInstructionName(number) {
 		return new fabric.Textbox(this.text, {
 			fontSize: 12,
@@ -46,7 +59,6 @@ export class Instruction {
 		stages.push(new Stage("W", 0, 0));
 		return stages;
 	}
-
 	_addStalls(stages) {
 		let _stages = [];
 		let stage = 0;

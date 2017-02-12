@@ -1,3 +1,4 @@
+import { Instruction } from '../../instructions/instruction';
 declare var fabric: any;
 
 import { Component } from "./component";
@@ -41,9 +42,11 @@ export class PipelineTableComponent extends Component {
 	addInstruction(instruction) {
 		let stages = instruction.createStages();
 		for (let i = 0; i < stages.length; i++) {
-			stages[i].instruction = this.currentInstruction;
-			stages[i].cycle = this.currentCycle + i;
-			this.addStage(stages[i]);
+			if(stages[i]!=undefined){
+				stages[i].instruction = this.currentInstruction;
+				stages[i].cycle = this.currentCycle + i;
+				this.addStage(stages[i]);
+			}
 		}
 		this.addInstructionName(instruction);
 		this.currentInstruction++;
@@ -53,6 +56,10 @@ export class PipelineTableComponent extends Component {
 		if (totalAux > this.$$cycles) {
 			this.$$cycles = totalAux;
 		}
+	}
+	addStalls(instruction){
+		let stalls = instruction.createStalls();
+
 	}
 
 	build() {

@@ -2,6 +2,7 @@ import {Canvas} from "./drawing/canvas";
 import {PipelineTableComponent} from "./drawing/components/pipeline-table.js";
 import {Instruction} from "./drawing/instruction";
 import {Pipeline} from "./pipeline";
+import {Main} from "./main";
 
 (function() {
 
@@ -10,12 +11,45 @@ import {Pipeline} from "./pipeline";
 	window["exportImage"] = exportImage;
 
 	let canvas;
-	let pipeline = new Pipeline();
 
 	function init() {
+		let allInstructions = JSON.stringify([
+  			{ if: 1, id: 2, ex: 3, mem: 6, wb: 7, stalls: [] },
+  			{ if: 2, id: 3, ex: 7, mem: 10, wb: 11, stalls: [ 4, 5, 6 ] },
+  			{ if: 3, id: 7, ex: 8, mem: 12, wb: 13, stalls: [ 4, 5, 6 ] },
+  			{ if: 7, id: 8, ex: 9, mem: 11, wb: 12, stalls: [ 4, 5, 6, 10 ] }
+		]);
+		let parsedInstructions = JSON.parse(allInstructions);
+		let pipeline = new PipelineTableComponent();
+		canvas = new Canvas("pipeline", 3000, 450);
+		//DRAW STALLS FIRST
+		for(var i = 0; i < parsedInstructions.length; i++){
+			let stalls = new Instruction({
+				stalls : parsedInstructions[i]["stalls"]
+			});
+		}
+		//Get instructionName and instruction
+
+		for(var i = 0; i < parsedInstructions.length; i++){
+			let inst = new Instruction({
+				instruction: "ADD $1, $2, $5",
+				numberExecutions: parsedInstructions[i]["mem"] - parsedInstructions[i]["ex"],
+				executionLabel: "A",
+				stalls: parsedInstructions[i]["stalls"],
+				unit: "integer",
+				structure: parsedInstructions[i]
+
+			});
+			console.log(parsedInstructions[i]);
+			pipeline.addInstruction(inst);
+		}
+		canvas.initialize();
+		canvas.add(pipeline);
+		canvas.render();
+		/*
 		let pipeline = new PipelineTableComponent();
 		let add = new Instruction({
-			instruction: "ADD $1, $2, $3",
+			instruction: "ADD $1, $2, $5",
 			numberExecutions: 2,
 			executionLabel: "A",
 			stalls: [2, 3],
@@ -81,6 +115,7 @@ import {Pipeline} from "./pipeline";
 			isWrite: false,
 			executionCycles: 2
 		};
+		*/
 	}
 
 	function exportImage() {
