@@ -82,6 +82,7 @@ export class InstructionExecuter {
 
 	executeInstruction() {
 		// tenta ler os operandos fonte
+		console.log(this.currentInstruction);
 		for (let i = 0; i < this.currentInstruction.operants.length; i++) {
 			let operant = this.currentInstruction.operants[i];
 			// Se o registrador estiver sob uso.

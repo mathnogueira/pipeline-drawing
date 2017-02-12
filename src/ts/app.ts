@@ -12,7 +12,14 @@ import {Pipeline} from "./pipeline";
 	let canvas;
 
 	function init() {
-		let textInstructions = ["add r1 r2 r3", "subi r1 r1 3", "div r1 r6 r7", "lw r6 0(r7)"];
+		let textInstructions = [
+			"add r1 r2 r3",
+			"subi r1 r1 3",
+			"div r1 r6 r7",
+			"lw r6 0(r7)",
+			"subi r1 r1 1",
+			"mult r2 r2 r1"
+		];
 		let pipelineExecutor = new Pipeline(textInstructions);
 		let parsedInstructions = pipelineExecutor.run();
 		let pipeline = new PipelineTableComponent();

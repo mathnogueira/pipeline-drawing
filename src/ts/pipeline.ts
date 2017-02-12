@@ -46,7 +46,7 @@ export class Pipeline implements IUnit {
 	 * 
 	 */
 	tick() :void {
-		if (this.executers.length < 5 && this.dispatchedInstructions < this.registers.INSTRUCTIONS.length) {
+		if (this.dispatchedInstructions < this.registers.INSTRUCTIONS.length) {
 			let executer: InstructionExecuter = 
 				new InstructionExecuter(this.dataHazardDetector, this.structureHazardDetector, this.registers);
 			executer.setInstruction(this.registers.INSTRUCTIONS[this.dispatchedInstructions]);
@@ -77,6 +77,9 @@ export class Pipeline implements IUnit {
 			for (; i < this.executers.length; i++) {
 				let executer = this.executers[i];
 				executer.tick(this.clock);
+				// if (executer.haveFinished()) {
+				// 	this.executers.splice(i, 1);
+				// }
 			}
 		} catch (e) {
 			for (; i < this.executers.length; i++) {
