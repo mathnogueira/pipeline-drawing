@@ -14,31 +14,11 @@ export class Instruction {
 
 	constructor(options?: any) {
 		this.text = options.instruction;
-		this.execution = options.numberExecutions;
-		this.stalls = options.stalls || [];
+		this.execution = options.execution;
 		this.unit = options.unit;
 		this.exLabel = options.executionLabel || "X";
-		this.structure = options.structure;
 	}
-
-	createStages() {
-		let stages = this._createStages();
-		stages = this._addStalls(stages);
-		return stages;
-	}
-
-	createStalls(){
-		let stalls = this.newStalls();
-		return stalls;
-	}
-	newStalls(){
-		let stalls = []
-		for (let i = 0; i < this.stalls.length; i++) {
-			stalls[this.stalls[i]] = new Stall("S");
-		}
-		return stalls;
-	}
-	createInstructionName(number) {
+	public getInstructionName(number) {
 		return new fabric.Textbox(this.text, {
 			fontSize: 12,
 			top: 45 + 40 * number,
@@ -58,20 +38,5 @@ export class Instruction {
 		stages.push(new Stage("M", 0, 0));
 		stages.push(new Stage("W", 0, 0));
 		return stages;
-	}
-	_addStalls(stages) {
-		let _stages = [];
-		let stage = 0;
-		let numberStages = stages.length + this.stalls.length;
-		_stages.length = numberStages;
-		for (let i = 0; i < this.stalls.length; i++) {
-			_stages[this.stalls[i]] = new Stall("S");
-		}
-		for (let i = 0; i < numberStages; i++) {
-			if (_stages[i] === undefined) {
-				_stages[i] = stages[stage++];
-			}
-		}
-		return _stages;
 	}
 }

@@ -1,3 +1,4 @@
+import { InstructionFactory } from './instructions/instruction-factory';
 import { InstructionExecuter } from './instruction_executer';
 import { Instruction } from './instructions/instruction';
 import { FunctionalUnit } from './functional-units/base';
@@ -24,12 +25,16 @@ export class Pipeline implements IUnit {
 	private dispatchedInstructions: number;
 	private finishedInstructions: number;
 
-	constructor(instructions?: Array<Instruction>) {
+	constructor(instructions?: Array<string>) {
+		let objInstructions: Array<Instruction> = new Array<Instruction>();
+		for (let i = 0; i < instructions.length; i++) {
+			objInstructions.push(InstructionFactory.build(instructions[i]));
+		}
 		this.clock = 1;
 		this.dispatchedInstructions = 0;
 		this.finishedInstructions = 0;
 		this.registers = new PipelineRegisters();
-		this.registers.INSTRUCTIONS = instructions;
+		this.registers.INSTRUCTIONS = objInstructions;
 		this.structureHazardDetector = new StructureHazardDetector(this.registers);
 		this.dataHazardDetector = new RegisterController();
 		this.executers = new Array<InstructionExecuter>();
@@ -81,7 +86,7 @@ export class Pipeline implements IUnit {
 		}
 	}
 
-	run() :Object {
+	run() :Array<Object> {
 		while (this.clock < 100) {
 			this.tick();
 			this.dataHazardDetector.tick();
@@ -90,7 +95,7 @@ export class Pipeline implements IUnit {
 		}
 
 		// Output
-		let output = [];
+		let output:Array<Object> = new Array<Object>();
 		for (let i: number = 0; i < this.registers.INSTRUCTIONS.length; i++) {
 			output.push(this.registers.INSTRUCTIONS[i].getOutput());
 		}

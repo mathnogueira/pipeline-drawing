@@ -2,7 +2,6 @@ import {Canvas} from "./drawing/canvas";
 import {PipelineTableComponent} from "./drawing/components/pipeline-table.js";
 import {Instruction} from "./drawing/instruction";
 import {Pipeline} from "./pipeline";
-import {Main} from "./main";
 
 (function() {
 
@@ -13,36 +12,44 @@ import {Main} from "./main";
 	let canvas;
 
 	function init() {
-		let allInstructions = JSON.stringify([
-  			{ if: 1, id: 2, ex: 3, mem: 6, wb: 7, stalls: [] },
-  			{ if: 2, id: 3, ex: 7, mem: 10, wb: 11, stalls: [ 4, 5, 6 ] },
-  			{ if: 3, id: 7, ex: 8, mem: 12, wb: 13, stalls: [ 4, 5, 6 ] },
-  			{ if: 7, id: 8, ex: 9, mem: 11, wb: 12, stalls: [ 4, 5, 6, 10 ] }
-		]);
-		let parsedInstructions = JSON.parse(allInstructions);
+		let textInstructions = ["add r1 r2 r3", "subi r1 r1 3", "div r1 r6 r7", "lw r6 0(r7)"];
+		let pipelineExecutor = new Pipeline(textInstructions);
+		let parsedInstructions = pipelineExecutor.run();
 		let pipeline = new PipelineTableComponent();
 		canvas = new Canvas("pipeline", 3000, 450);
 		//DRAW STALLS FIRST
-		for(var i = 0; i < parsedInstructions.length; i++){
-			let stalls = new Instruction({
-				stalls : parsedInstructions[i]["stalls"]
-			});
-		}
+		// for(var i = 0; i < parsedInstructions.length; i++){
+		// 	let stalls = new Instruction({
+		// 		stalls : parsedInstructions[i]["stalls"]
+		// 	});
+		// }
 		//Get instructionName and instruction
 
-		for(var i = 0; i < parsedInstructions.length; i++){
-			let inst = new Instruction({
-				instruction: "ADD $1, $2, $5",
-				numberExecutions: parsedInstructions[i]["mem"] - parsedInstructions[i]["ex"],
-				executionLabel: "A",
-				stalls: parsedInstructions[i]["stalls"],
-				unit: "integer",
-				structure: parsedInstructions[i]
-
+		for (let i: number = 0; i < parsedInstructions.length; i++) {
+			// Cria uma instrucao
+			let instruction = new Instruction({
+				instruction: textInstructions[i],
+				execution: parsedInstructions[i],
+				unit: "integer"
 			});
+
 			console.log(parsedInstructions[i]);
-			pipeline.addInstruction(inst);
+			pipeline.addInstruction(instruction);
 		}
+
+		// for(var i = 0; i < parsedInstructions.length; i++){
+		// 	let inst = new Instruction({
+		// 		instruction: "ADD $1, $2, $5",
+		// 		numberExecutions: parsedInstructions[i]["mem"] - parsedInstructions[i]["ex"],
+		// 		executionLabel: "A",
+		// 		stalls: parsedInstructions[i]["stalls"],
+		// 		unit: "integer",
+		// 		structure: parsedInstructions[i]
+
+		// 	});
+		// 	console.log(parsedInstructions[i]);
+		// 	pipeline.addInstruction(inst);
+		// }
 		canvas.initialize();
 		canvas.add(pipeline);
 		canvas.render();

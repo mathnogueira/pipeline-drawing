@@ -1,3 +1,5 @@
+import { Stall } from './stall';
+import { Stage } from './stage';
 import { Instruction } from '../../instructions/instruction';
 declare var fabric: any;
 
@@ -36,30 +38,48 @@ export class PipelineTableComponent extends Component {
 	}
 
 	addInstructionName(instruction) {
-		this.objects.push(instruction.createInstructionName(this.currentInstruction));
+		this.objects.push(instruction.getInstructionName(this.currentInstruction));
 	}
 
 	addInstruction(instruction) {
-		let stages = instruction.createStages();
-		for (let i = 0; i < stages.length; i++) {
-			if(stages[i]!=undefined){
-				stages[i].instruction = this.currentInstruction;
-				stages[i].cycle = this.currentCycle + i;
-				this.addStage(stages[i]);
+			let labels = {
+				if: "if",
+				id: "id",
+				ex: "X",
+				mem: "m",
+				wb: "wb"
+			};
+
+			let order = ["if", "id", "ex", "mem", "wb"];
+		for (let key in instruction.execution) {
+			if (key != "stalls") {
+				let firstCycle: number = instruction.execution[key];
+				let nextStage = order[order.indexOf(key)+1];
+				let lastCycle: number = instruction.execution[nextStage] || firstCycle;
+				let currentCycle: number = firstCycle-1;
+				console.log(currentCycle, "<", lastCycle);
+				while (currentCycle < lastCycle) {
+					let stage: Stage;
+					if (instruction.execution["stalls"].indexOf(currentCycle+1) < 0) {
+						stage = new Stage(labels[key], this.currentInstruction, currentCycle);
+						console.log(key);
+					} else {
+						stage = new Stall(this.currentInstruction, currentCycle);
+					}
+					this.addStage(stage);
+					currentCycle++;
+				}
 			}
 		}
+
 		this.addInstructionName(instruction);
 		this.currentInstruction++;
 		this.currentCycle++;
 
-		let totalAux = this.currentCycle + stages.length;
+		let totalAux = this.currentCycle + instruction.execution["wb"];
 		if (totalAux > this.$$cycles) {
 			this.$$cycles = totalAux;
 		}
-	}
-	addStalls(instruction){
-		let stalls = instruction.createStalls();
-
 	}
 
 	build() {
@@ -78,7 +98,7 @@ export class PipelineTableComponent extends Component {
 		});
 	}
 
-	drawTableContent(objects) {
+	private drawTableContent(objects) {
 		let tableContent = new fabric.Rect({
 			top: 30,
 			left: 120,
@@ -94,7 +114,7 @@ export class PipelineTableComponent extends Component {
 		objects.push(tableContent);
 	}
 
-	drawTableHeaders(objects) {
+	private drawTableHeaders(objects) {
 		// Clock number place
 		let clockHolder = new fabric.Rect({
 			top: 0,
@@ -125,7 +145,7 @@ export class PipelineTableComponent extends Component {
 		objects.push(clockHolder);
 	}
 
-	drawClocks(numberClocks, objects) {
+	private drawClocks(numberClocks, objects) {
 		let width = 45;
 		for (let i = 1; i < numberClocks; i++) {
 			console.log(i);
@@ -153,7 +173,7 @@ export class PipelineTableComponent extends Component {
 		}
 	}
 
-	drawInstructions(numberInstructions, arr) {
+	private drawInstructions(numberInstructions, arr) {
 		let height = this.height / numberInstructions;
 		for (let i = 1; i < numberInstructions; i++) {
 			let line = new fabric.Line([0, 0, this.width + 120, 0], {
