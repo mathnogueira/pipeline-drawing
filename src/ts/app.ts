@@ -33,13 +33,6 @@ import {Pipeline} from "./pipeline";
 		}
 		let pipeline = new PipelineTableComponent(maxCycles, parsedInstructions.length);
 		canvas = new Canvas("pipeline", pipeline.width + 140, pipeline.height + 45);
-		//DRAW STALLS FIRST
-		// for(var i = 0; i < parsedInstructions.length; i++){
-		// 	let stalls = new Instruction({
-		// 		stalls : parsedInstructions[i]["stalls"]
-		// 	});
-		// }
-		//Get instructionName and instruction
 
 		for (let i: number = 0; i < parsedInstructions.length; i++) {
 			// Cria uma instrucao
@@ -52,91 +45,9 @@ import {Pipeline} from "./pipeline";
 			pipeline.addInstruction(instruction);
 		}
 
-		// for(var i = 0; i < parsedInstructions.length; i++){
-		// 	let inst = new Instruction({
-		// 		instruction: "ADD $1, $2, $5",
-		// 		numberExecutions: parsedInstructions[i]["mem"] - parsedInstructions[i]["ex"],
-		// 		executionLabel: "A",
-		// 		stalls: parsedInstructions[i]["stalls"],
-		// 		unit: "integer",
-		// 		structure: parsedInstructions[i]
-
-		// 	});
-		// 	pipeline.addInstruction(inst);
-		// }
 		canvas.initialize();
 		canvas.add(pipeline);
 		canvas.render();
-		/*
-		let pipeline = new PipelineTableComponent();
-		let add = new Instruction({
-			instruction: "ADD $1, $2, $5",
-			numberExecutions: 2,
-			executionLabel: "A",
-			stalls: [2, 3],
-			unit: "integer"
-		});
-
-		let sub = new Instruction({
-			instruction: "SUB $1, $2, $3",
-			numberExecutions: 2,
-			executionLabel: "A",
-			stalls: [1, 2],
-			unit: "integer"
-		});
-
-		let div = new Instruction({
-			instruction: "DIV $7, $2, $3",
-			numberExecutions: 20,
-			executionLabel: "d",
-			stalls: [0, 1],
-			unit: "integer"
-		});
-
-		let mult = new Instruction({
-			instruction: "MULT $1, $2, $3",
-			numberExecutions: 7,
-			executionLabel: "m",
-			stalls: [0],
-			unit: "integer"
-		});
-		canvas = new Canvas("pipeline", 3000, 450);
-		pipeline.addInstruction(add);
-		pipeline.addInstruction(sub);
-		pipeline.addInstruction(div);
-		pipeline.addInstruction(mult);
-		canvas.initialize();
-		canvas.add(pipeline);
-		canvas.render();
-
-
-		let addInstruction = {
-			start: 2,
-			destination: "F0",
-			operants: ["F1", "F2"],
-			isLoad: false,
-			isWrite: false,
-			executionCycles: 2
-		};
-
-		let divInstruction = {
-			start: 1,
-			destination: "F0",
-			operants: ["F1", "F2"],
-			isLoad: false,
-			isWrite: false,
-			executionCycles: 5
-		};
-
-		let subInstruction = {
-			start: 3,
-			destination: "F1",
-			operants: ["F0", "F2"],
-			isLoad: false,
-			isWrite: false,
-			executionCycles: 2
-		};
-		*/
 	}
 
 	function exportImage() {
