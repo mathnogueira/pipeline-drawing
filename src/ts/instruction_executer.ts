@@ -87,8 +87,10 @@ export class InstructionExecuter {
 		if (!this.regController.isReadable(this.currentInstruction.detinationRegister) && 
 			currentExecuter != this.currentInstruction && 
 			currentExecuter.dispatchedCycle < this.currentInstruction.dispatchedCycle) {
-			console.log("STALL");	
-			throw new StallException("conflito de dados no " + this.currentInstruction.detinationRegister);	
+			//if(!this.tryDataForward(this.currentInstruction.detinationRegister)){
+				console.log("STALL");	
+				throw new StallException("conflito de dados no " + this.currentInstruction.detinationRegister);	
+			//}
 		}
 		// tenta ler os operandos fonte
 		for (let i = 0; i < this.currentInstruction.operants.length; i++) {
