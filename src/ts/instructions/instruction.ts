@@ -45,7 +45,9 @@ export abstract class Instruction {
 
 	public getOutput() :Object {
 		let output = JSON.parse(JSON.stringify(this.output));
+		console.log(this.exUnit);
 		output["stalls"] = this.stalls;
+		output["unit"] = this.exUnit;
 
 		return output;
 	}

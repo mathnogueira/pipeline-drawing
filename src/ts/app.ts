@@ -163,7 +163,7 @@ declare var angular: any;
 				let instruction = new Instruction({
 					instruction: vm.txtInstructions[i],
 					execution: parsedInstructions[i],
-					unit: "integer"
+					unit: parsedInstructions[i]["unit"]
 				});
 
 				pipeline.addInstruction(instruction);
