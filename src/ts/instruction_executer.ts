@@ -109,6 +109,7 @@ export class InstructionExecuter {
 				}
 			}
 		}
+		this.currentInstruction.tick();
 		if (!this.rdReserved) {
 			// Reserva o rd por delay + 1 ciclos (ex + mem)
 			let delay = this.currentInstruction.delay + 1;
