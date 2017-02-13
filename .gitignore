@@ -4,3 +4,7 @@ dist/
 node_modules/
 bower_components/
 src/out
+Relatorio/*.log
+Relatorio/*.gz
+Relatorio/*.aux
+Relatorio/*.out
