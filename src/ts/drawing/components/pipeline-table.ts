@@ -48,17 +48,25 @@ export class PipelineTableComponent extends Component {
 	}
 
 	addInstruction(instruction) {
+			let units = {
+				fp_add: "fA",
+				fp_mult: "fM",
+				fp_div:	"fD",
+				int_add: "A",
+				int_mult: "M",
+				int_div: "D"
+			}
 			let labels = {
 				if: "if",
 				id: "id",
-				ex: "X",
+				ex: units[instruction.unit] || "X",
 				mem: "m",
 				wb: "wb"
 			};
 
 			let order = ["if", "id", "ex", "mem", "wb"];
 		for (let key in instruction.execution) {
-			if (key != "stalls") {
+			if (key != "stalls" && key != "unit") {
 				let firstCycle: number = instruction.execution[key];
 				let nextStage = order[order.indexOf(key)+1];
 				let lastCycle: number = instruction.execution[nextStage] || firstCycle;

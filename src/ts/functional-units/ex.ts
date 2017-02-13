@@ -18,39 +18,14 @@ export class EXunit extends FunctionalUnit {
 	}
 
     public execute(regController?: RegisterController): void {
-        // let isReadable: boolean;
-        // let canExecute: boolean = true;
         if (!this.cyclesLeft)
             this.cyclesLeft = this.input["cost"];
         if (!this.rd)
             this.rd = this.input["rd"];
-
-        // // Reserva os registradores rs e rt para leitura
-        // if (this.input["rs"]) {
-        //     isReadable = regController.isReadable("rs");
-        //     if (!isReadable) {
-        //         // Tenta adiantar rs
-        //         canExecute = false;
-        //     }
-        // }
-        // if (this.input["rt"]) {
-        //     isReadable = regController.isReadable("rt");
-        //     if (!isReadable) {
-        //         // tenta adiantar rt
-        //         canExecute = false;
-        //     }
-        // }
-        // // Reserva o Rd para escrita
-        // if (this.input["rd"]) {
-        //     regController.write(this.input["rd"], 5);
-        // }
-        // if (!canExecute) {
-        //     // Se tudo for em vão, para a pipeline.
-        //     throw new StallException();
-        // }
     }
 
     public tick(cycle: number): void {
+        console.log(this.cyclesLeft);
         if (this.cyclesLeft === undefined) return;
         this.cyclesLeft -= 1;
         if (this.cyclesLeft === 0) {

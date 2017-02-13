@@ -9,6 +9,7 @@ declare var fabric: any;
 export class Canvas {
 
 	public $$canvas;
+	public idCanvas;
 	public width;
 	public height;
 
@@ -20,6 +21,7 @@ export class Canvas {
 	 * @param {number} height altura do canvas
 	 */
 	constructor(canvas, width, height) {
+		this.idCanvas = canvas;
 		// this.$$canvas = document.getElementById(canvas);
 		this.$$canvas = new fabric.Canvas(canvas);
 		this.width = width;
@@ -35,6 +37,10 @@ export class Canvas {
 		this.$$canvas.setWidth(this.width);
 		this.$$canvas.setHeight(this.height);
 	}
+
+	// clear() {
+	// 	this.$$canvas.clear();
+	// }
 
 	add(component) {
 		this.$$canvas.add(component.build());

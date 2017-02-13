@@ -7,7 +7,6 @@ class PipelineTest {
 
 	@test("Test output json")
 	test() {
-		console.log("TESTEEEEEEEEEEEEEEEEEEEEEEEEE");
 		InstructionDelay.add = 3;
 		InstructionDelay.subi = 3;
 		InstructionDelay.div = 4;
@@ -26,7 +25,6 @@ class PipelineTest {
 		}
 
 		let pipeline: Pipeline = new Pipeline(instructions);
-		console.log(pipeline.run());
 	}
 
 }

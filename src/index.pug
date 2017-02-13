@@ -1,5 +1,5 @@
-outputdoctype html
-html(lang="pt-br")
+doctype html
+html(lang="pt-br", ng-app="app")
 	head
 		meta(charset="utf-8")
 		title MIPS Pipeline
@@ -11,14 +11,20 @@ html(lang="pt-br")
 
 		link(rel="stylesheet", href="style/style.css")
 	body
-		header
-			include _partials/header.pug
-		section
-			canvas#pipeline
-		footer
-			include _partials/footer.pug
+		.container-fluid
+			div(ng-controller="PipelineController as app")
+				header.row
+					.col-md-12
+						include _partials/header.pug
+				.row(ng-show="app.executado")
+					footer
+						include _partials/footer.pug
+					section
+						.col-md-12
+							canvas#pipeline
 
 		script(src="../bower_components/fabric.js/dist/fabric.min.js")
 		script(src="../bower_components/systemjs/build/system.min.js")
+		script(src="../bower_components/angular/angular.min.js")
 
 		script(src="js/app.js")

@@ -1,1 +1,114 @@
-h1 Header
+.col-md-12
+	h2.text-center Configurações do bloco básico
+	form(name="operandos", novalidate)
+		.col-md-2
+			.form-group
+				label Instrução
+				select.form-control(ng-model="app.instrucaoAtual")
+					option(value="addd") ADD.D
+					option(value="subd") SUB.D
+					option(value="multd") MULTD
+					option(value="divd") DIV.D
+					option(value="ld") LD
+					option(value="sd") SD
+					option(value="add") ADD
+					option(value="daddui") DADDUI
+					option(value="subi") SUBI
+					option(value="mult") MULT
+					option(value="div") DIV
+					option(value="lw") LW
+					option(value="sw") SW
+					option(value="beq") BEQ
+					option(value="bnez") bnez
+
+		.col-md-2(ng-if="app.mostrarRd")
+			.form-group
+				label RD
+				input.form-control(ng-model="app.operandos.rd", required)
+		
+		.col-md-2(ng-if="app.mostrarRs")
+			.form-group
+				label RS
+				input.form-control(ng-model="app.operandos.rs", required)
+		
+		.col-md-2(ng-if="app.mostrarRt")
+			.form-group
+				label RT
+				input.form-control(ng-model="app.operandos.rt", required)
+
+		.col-md-2(ng-if="app.mostrarDeslocamento")
+			.form-group
+				label Deslocamento
+				input.form-control(ng-model="app.operandos.deslocamento", required)
+		.col-md-2
+			.form-group.btn-holder
+				button.btn.btn-primary(ng-click="app.adicionarInstrucao()") Adicionar Instrução
+	.row
+		.col-md-12
+			hr
+			.col-md-6
+				table.table.table-striped.table-bordered(ng-show="app.instrucoes.length > 0")
+					thead
+						th Instrução
+						th Ação
+					tbody
+						tr(ng-repeat="instrucao in app.instrucoes")
+							td {{ instrucao.texto }}
+							td 
+								a(href="", ng-click="app.removerInstrucao(instrucao)") Remover
+			.col-md-6
+				.col-md-4
+					.checkbox
+						label
+							input(type="checkbox", ng-model="app.adiantamento")
+							|  Ativar adiantamento
+				.col-md-8
+					button.btn.btn-primary(ng-click="app.executar()", ng-disabled="app.instrucoes.length === 0") Executar
+			hr
+		
+.col-md-12
+	.pull-right
+		a(ng-click="app.toggleConfig()", href="") 
+			span(ng-hide="app.showConfig") Abrir
+			span(ng-show="app.showConfig") Fechar
+			|  configurações avançadas
+.col-md-12(ng-show="app.showConfig")
+	hr
+	.col-md-12.text-center
+		h2 Configurações Avançadas
+	.col-md-7
+		h3.text-center Informe as latências em forma de tabela
+		div.alert.alert-info.text-center
+			| Nessa tabela você pode informar manualmente a latência de execução para cada instrução
+			| suportada pelo algoritmo. Para informar a latência de uma instrução, clique no link "Editar", 
+			| edite o valor no campo que aparecerá, e depois clique em "Aplicar". Após realizar a configuração,
+			| você pode exportá-la como JSON. Para isso, clique no botão "Exportar JSON", localizado após a tabela.
+			| O JSON exportado estará disponível no campo ao lado.
+		table.table.table-striped.table-bordered
+			thead
+				th Instrução
+				th Latência
+				th
+			tbody
+				tr(ng-repeat="instrucao in app.latencias")
+					td {{instrucao.nome}}
+					td(style="max-width: 100px") 
+						span(ng-hide="app.edicaoLatencia[instrucao.nome]") {{instrucao.latencia}}
+						input.form-control.input-sm(ng-model="app.auxLatencias[instrucao.nome]", ng-show="app.edicaoLatencia[instrucao.nome]")
+					td
+						a(href="", ng-click="app.editarLatencia(instrucao)", ng-hide="app.edicaoLatencia[instrucao.nome]") Editar
+						a(href="", ng-click="app.aplicarLatencia(instrucao)", ng-show="app.edicaoLatencia[instrucao.nome]") Aplicar
+		.pull-right
+			button.btn.btn-default(ng-click="app.exportJSON()") Exportar JSON
+	.col-md-5
+		h3.text-center Informe as latências como JSON
+		div.alert.alert-info.text-center
+			| Você pode, como alternativa, definir a latência dos campos usando a notação
+			| JSON para que você não tenha que configurar todas as instruções uma a uma novamente na tabela.
+			| Para isso, cole o JSON nesse campo e clique em "Importar JSON".
+			| É recomendado você gerar o JSON a partir da tabela ao lado para evitar erros de importação.
+		textarea.form-control(ng-model="app.latenciaJson")
+		.pull-right.btn-holder
+			button.btn.btn-default(ng-click="app.importJSON()") Importar JSON
+
+	hr

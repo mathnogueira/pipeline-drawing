@@ -14,11 +14,13 @@ export class InstructionExecuter {
 	private cyclesLeft: number = -1;
 	private rdReserved: string = null;
 	private unit: FunctionalUnit;
+	private forward: boolean;
 
-	constructor(regController: RegisterController, hazardDetector: StructureHazardDetector, pipelineRegisters?:PipelineRegisters) {
+	constructor(regController: RegisterController, hazardDetector: StructureHazardDetector, pipelineRegisters?:PipelineRegisters, forward?:boolean) {
 		this.regController = regController;
 		this.structureController = hazardDetector;
 		this.pipelineRegisters = pipelineRegisters;
+		this.forward = forward;
 		this.free = true;
 	}
 
@@ -56,7 +58,6 @@ export class InstructionExecuter {
 					throw e;
 				}
 				this.cyclesLeft--;
-				console.log("No ciclo", cycle, "faltam", this.cyclesLeft, "para terminar a instrucao", this.currentInstruction.name);
 				if (this.cyclesLeft === 0) {
 					this.currentInstruction.stage = EStage.MEM;
 				}
@@ -81,8 +82,15 @@ export class InstructionExecuter {
 	}
 
 	executeInstruction() {
+		// Verifica se a instrucao pode escrever no rd.
+		let currentExecuter = this.regController.getExecutingInstruction(this.currentInstruction.detinationRegister);
+		if (!this.regController.isReadable(this.currentInstruction.detinationRegister) && 
+			currentExecuter != this.currentInstruction && 
+			currentExecuter.dispatchedCycle < this.currentInstruction.dispatchedCycle) {
+			console.log("STALL");	
+			throw new StallException("conflito de dados no " + this.currentInstruction.detinationRegister);
+		}
 		// tenta ler os operandos fonte
-		console.log(this.currentInstruction);
 		for (let i = 0; i < this.currentInstruction.operants.length; i++) {
 			let operant = this.currentInstruction.operants[i];
 			// Se o registrador estiver sob uso.
@@ -143,6 +151,13 @@ export class InstructionExecuter {
 							
 					}
 					
+					// Verifica as condições de adiantamento, caso este recurso esteja disponível.
+					if (this.forward) {
+						let canForwardData = this.tryDataForward(operant);
+						if (canForwardData) {
+							continue;
+						}
+					}
 					throw new StallException("conflito de dados no " + operant);
 				}
 			}
@@ -152,6 +167,16 @@ export class InstructionExecuter {
 			this.regController.write(this.currentInstruction.detinationRegister, this.currentInstruction.delay + 1, this.currentInstruction);
 			this.rdReserved = this.currentInstruction.detinationRegister;
 		}
+	}
+
+	private tryDataForward(register): boolean {
+		// Eu sei que o codigo ta zuado, era so pra teste.
+		// Fazer verificação de adiantamento aqui!
+		if (this.pipelineRegisters.EX_MEM["rd"] == register)
+			return true;
+		if (this.pipelineRegisters.MEM_WB["rd"] == register)
+			return true;
+		return false;
 	}
 
 	haveFinished() {

@@ -46,6 +46,7 @@ export abstract class Instruction {
 	public getOutput() :Object {
 		let output = JSON.parse(JSON.stringify(this.output));
 		output["stalls"] = this.stalls;
+		output["unit"] = this.exUnit;
 
 		return output;
 	}
@@ -69,7 +70,5 @@ export class InstructionDelay {
 	public static sw: number = 1;
 	public static beq: number = 1;
 	public static bnez: number = 1;
-
-
 
 }

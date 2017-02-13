@@ -24,8 +24,9 @@ export class Pipeline implements IUnit {
 	private freeExecuters: number;
 	private dispatchedInstructions: number;
 	private finishedInstructions: number;
+	private enableForward: boolean;
 
-	constructor(instructions?: Array<string>) {
+	constructor(instructions?: Array<string>, adiantamento?: boolean) {
 		let objInstructions: Array<Instruction> = new Array<Instruction>();
 		for (let i = 0; i < instructions.length; i++) {
 			objInstructions.push(InstructionFactory.build(instructions[i]));
@@ -38,6 +39,7 @@ export class Pipeline implements IUnit {
 		this.structureHazardDetector = new StructureHazardDetector(this.registers);
 		this.dataHazardDetector = new RegisterController();
 		this.executers = new Array<InstructionExecuter>();
+		this.enableForward = !!adiantamento;
 	}
 
 	/**
@@ -48,7 +50,7 @@ export class Pipeline implements IUnit {
 	tick() :void {
 		if (this.dispatchedInstructions < this.registers.INSTRUCTIONS.length) {
 			let executer: InstructionExecuter = 
-				new InstructionExecuter(this.dataHazardDetector, this.structureHazardDetector, this.registers);
+				new InstructionExecuter(this.dataHazardDetector, this.structureHazardDetector, this.registers, this.enableForward);
 			executer.setInstruction(this.registers.INSTRUCTIONS[this.dispatchedInstructions]);
 			this.registers.INSTRUCTIONS[this.dispatchedInstructions].dispatchedCycle = this.clock;
 			this.dispatchedInstructions++;
@@ -57,33 +59,14 @@ export class Pipeline implements IUnit {
 		this.executers.sort(function(a, b) {
 			return a.currentInstruction.dispatchedCycle - a.currentInstruction.dispatchedCycle;
 		});
-		// let stalls = [];
-		// for (let i: number = 0; i < this.executers.length; i++) {
-		// 	try {
-		// 		let canExecute: boolean = true;
-		// 		for (let j = 0; j < stalls.length; j++) {
-		// 			if (this.executers[i].currentInstruction.dispatchedCycle > stalls[j])
-		// 				canExecute = false;
-		// 		}
-		// 		if (canExecute)
-		// 			this.executers[i].tick(this.clock);
-		// 	} catch (e) {
-		// 		console.log(e.message, this.clock);
-		// 		stalls.push(this.executers[i].currentInstruction.dispatchedCycle);
-		// 	}
-		// }
 		let i: number = 0;
 		try {
 			for (; i < this.executers.length; i++) {
 				let executer = this.executers[i];
 				executer.tick(this.clock);
-				// if (executer.haveFinished()) {
-				// 	this.executers.splice(i, 1);
-				// }
 			}
 		} catch (e) {
 			for (; i < this.executers.length; i++) {
-				// console.log(this.executers[i].currentInstruction.name);
 				this.executers[i].currentInstruction.stalls.push(this.clock);
 			}
 		}
