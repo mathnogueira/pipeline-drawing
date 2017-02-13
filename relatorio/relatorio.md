@@ -1,4 +1,14 @@
-# Instalação
+# Arquitetura de Computadores II
+
+Trabalho desenvolvido pelos alunos:
+
+- Gustavo Nunes
+- Matheus Nogueira
+- Roberto Gonçalves
+
+___
+
+## Instalação
 
 Para instalar o programa, você tem 2 alternativas:
 
@@ -8,7 +18,8 @@ Para instalar o programa, você tem 2 alternativas:
 ## Compilar codigo fonte
 
 Para compilar o programa, você necessitará dos seguintes programs:
-- NodeJS com NPM (Node Package Manager)
+- NodeJS
+- NPM (NodeJS package manager): baixado automaticamente com o NodeJS
 - Bower: basta executar ```sudo npm install -g bower```
 
 Com tais programas instalados, navegue até a pasta contendo o projeto e execute os seguintes
@@ -20,7 +31,7 @@ bower install
 gulp build
 ```
 
-Isso deverá gerar uma pasta chamada ```dist```, a qual contém a seguinte estrutura:
+Isso deverá gerar uma pasta chamada ```dist```, a qual contém a estrutura básica do programa.
 ```
  \---fonts/
  \---js/
