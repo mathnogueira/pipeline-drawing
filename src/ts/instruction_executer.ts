@@ -87,7 +87,7 @@ export class InstructionExecuter {
 		if (!this.regController.isReadable(this.currentInstruction.detinationRegister) && 
 			currentExecuter != this.currentInstruction && 
 			currentExecuter.dispatchedCycle < this.currentInstruction.dispatchedCycle) {
-			//if(!this.tryDataForward(this.currentInstruction.detinationRegister)){
+			//if(!this.tryDataForward(this.currentInstruction.detinationRegister) && this.currentInstruction.cyclesLeft != 1){
 				console.log("STALL");	
 				throw new StallException("conflito de dados no " + this.currentInstruction.detinationRegister);	
 			//}
