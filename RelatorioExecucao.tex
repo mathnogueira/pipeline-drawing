@@ -1,0 +1,66 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+ 
+\lstdefinestyle{DOS}
+{
+    backgroundcolor=\color{white},
+    basicstyle=\scriptsize\color{black}\small
+}
+
+\begin{document}
+    \begin{center}
+	    \includegraphics[width=100mm,scale=1]{logo-ufla.jpg}	 
+    \end{center}
+    	 \vspace{1cm}
+    \begin{center}
+        \huge\textbf{Arquitetura de Computadores II}
+        \vspace{3cm}\\
+       \Large{ Trabalho Prático - Pipeline}\\
+        \vspace{2cm}
+        \end{center}
+       \Large{ Matheus Nogueira\\
+       Roberto Gonçalves\\
+       Gustavo Nunes\\}
+   
+        \vspace{3cm}
+        \begin{center}
+        \huge Universidade Federal de Lavras
+        \end{center}
+ 
+    \clearpage
+	\begin{center}
+	\Large\textbf{Instalação}
+	\end{center}
+	
+	\begin{itemize}
+	\item Baixe e instale o \textbf{github}: 
+	\begin{lstlisting}[style=DOS]
+	 https://git-scm.com/downloads
+\end{lstlisting}
+	\item Após baixado, vá até uma pasta desejada e digite:
+	\begin{lstlisting}[style=DOS]
+	$ git clone https://github.com/mathnogueira/pipeline-drawing
+\end{lstlisting}
+	\item Agora vá na pipeline-drawning e digite para instalar:
+	\begin{lstlisting}[style=DOS]
+	$ sudo apt-get install nodejs
+	$ sudo apt-get install npm
+	$ sudo npm install bower -g
+\end{lstlisting}
+	\item Agora vá na pipeline-drawning e digite para instalar:
+	\begin{lstlisting}[style=DOS]
+	$ gulp build
+	$ gulp pug
+	$ gulp less
+	$ gulp babel
+\end{lstlisting}
+	\item Agora vá na pasta build e clique no index.html
+
+
+ \end{itemize}
+\end{document}
