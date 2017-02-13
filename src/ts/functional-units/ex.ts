@@ -25,7 +25,6 @@ export class EXunit extends FunctionalUnit {
     }
 
     public tick(cycle: number): void {
-        console.log(this.cyclesLeft);
         if (this.cyclesLeft === undefined) return;
         this.cyclesLeft -= 1;
         if (this.cyclesLeft === 0) {
