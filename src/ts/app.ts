@@ -32,6 +32,7 @@ declare var angular: any;
 		vm.edicaoLatencia = [];
 		vm.instrucoes = [];
 		vm.operados = {};
+		vm.adiantamento = false;
 
 		init();
 		let memInstructions: Array<string> = ["ld", "sd", "lw", "sw"];
@@ -148,7 +149,8 @@ declare var angular: any;
 		}
 
 		function drawPipeline() {
-			let pipelineExecutor = new Pipeline(vm.txtInstructions);
+			console.log(vm.adiantamento);
+			let pipelineExecutor = new Pipeline(vm.txtInstructions, vm.adiantamento);
 			let parsedInstructions = pipelineExecutor.run();
 			let maxCycles: number = 0;
 			for (let i: number = 0; i < parsedInstructions.length; i++) {

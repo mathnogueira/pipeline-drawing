@@ -25,7 +25,7 @@ export class Pipeline implements IUnit {
 	private dispatchedInstructions: number;
 	private finishedInstructions: number;
 
-	constructor(instructions?: Array<string>) {
+	constructor(instructions?: Array<string>, adiantamento?: boolean) {
 		let objInstructions: Array<Instruction> = new Array<Instruction>();
 		for (let i = 0; i < instructions.length; i++) {
 			objInstructions.push(InstructionFactory.build(instructions[i]));
