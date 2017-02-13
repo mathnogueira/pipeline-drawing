@@ -41,7 +41,7 @@ export class InstructionExecuter {
 				this.currentInstruction.output["id"] = cycle;
 				this.unit = this.structureController.useStructure("id", 1);
 				this.currentInstruction.stage = EStage.EX;
-				break;
+				break;				
 			case EStage.EX:
 				if (this.cyclesLeft === -1) {
 					this.currentInstruction.output["ex"] = cycle;
@@ -98,6 +98,11 @@ export class InstructionExecuter {
 				let currentExecuter = this.regController.getExecutingInstruction(operant);
 				if (currentExecuter != this.currentInstruction && 
 					currentExecuter.dispatchedCycle < this.currentInstruction.dispatchedCycle) {
+				// if(operant != this.rdReserved) {
+					// Tem que soltar uma bolha ou tentar o adiantamento.
+					// USAR O this.pipelineRegisters para verificar quais registradores
+					// estao em qual etapa da execucao. Aplicar o algoritmo do slide.
+					// bolha
 					// Verifica as condições de adiantamento, caso este recurso esteja disponível.
 					if (this.forward) {
 						let canForwardData = this.tryDataForward(operant);
@@ -122,12 +127,52 @@ export class InstructionExecuter {
 	}
 
 	private tryDataForward(register): boolean {
-		// Eu sei que o codigo ta zuado, era so pra teste.
-		// Fazer verificação de adiantamento aqui!
-		if (this.pipelineRegisters.EX_MEM["rd"] == register)
-			return true;
-		if (this.pipelineRegisters.MEM_WB["rd"] == register)
-			return true;
+		// ADIANTAMENTO:
+		// 1. EX/MEM hazard:
+     	/*
+     				if (EX/MEM.RegWrite
+     				and (EX/MEM.RegisterRd != 0)
+     				and (EX/MEM.RegisterRd = ID/EX.RegisterRs))
+     					ForwardA = 
+					if (EX/MEM.RegWrite
+					and (EX/MEM.RegisterRd != 0)
+					and (EX/MEM.RegisterRd = ID/EX.RegisterRt))
+						ForwardB = 10
+					
+			2. MEM/WB hazard:
+					If (MEM/WB.RegWrite
+					and (MEM/WB.RegisterRd != 0)
+					and (EX/MEM.RegRd != ID/EX.REgRs)
+					and (MEM/WB.RegisterRd = ID/EX.RegisterRs))
+						ForwardA = 01
+					if (MEM/WB.RegWrite
+					and (MEM/WB.RegisterRd != 0)
+					and (EX/MEM.RegRd != ID/EX.REgRt)
+					and (MEM/WB.RegisterRd = ID/EX.RegisterRt))
+						ForwardB = 01
+		*/
+		console.log("Registrador RD EX_MEM: "+ this.pipelineRegisters.EX_MEM["rd"]+ " Registrador RS ID_EX: "+ this.pipelineRegisters.ID_EX["rs"]+ " Registrador RT ID_EX: "+ this.pipelineRegisters.ID_EX["rt"]);
+		if(this.pipelineRegisters.EX_MEM["rd"] == this.pipelineRegisters.ID_EX["rs"] && this.pipelineRegisters.EX_MEM["rd"] !== undefined){
+				//FowardA = 10
+				console.log("ADIANTAMENTO: EX_MEM RD PRA ID_EX RS");
+				return true;
+		}
+		else if(this.pipelineRegisters.EX_MEM["rd"] == this.pipelineRegisters.ID_EX["rt"] && this.pipelineRegisters.EX_MEM["rd"] !== undefined){
+				//FowardB = 10
+				console.log("ADIANTAMENTO: EX_MEM RD PRA ID_EX RT");
+				return true;
+		}
+		console.log("Registrador RD MEM_WB: "+ this.pipelineRegisters.MEM_WB["rd"]+ " Registrador RS ID_EX: "+ this.pipelineRegisters.ID_EX["rs"]+ " Registrador RT ID_EX: "+ this.pipelineRegisters.ID_EX["rt"]);
+		if(this.pipelineRegisters.EX_MEM["rd"] != this.pipelineRegisters.ID_EX["rs"] && this.pipelineRegisters.EX_MEM["rd"] == this.pipelineRegisters.ID_EX["rs"] && this.pipelineRegisters.MEM_WB["rd"] !== undefined){
+				//FowardA = 01
+				console.log("FowardA 01");
+				return true;
+		}
+		else if(this.pipelineRegisters.EX_MEM["rd"] != this.pipelineRegisters.ID_EX["rt"] && this.pipelineRegisters.EX_MEM["rd"] == this.pipelineRegisters.ID_EX["rt"] && this.pipelineRegisters.MEM_WB["rd"] !== undefined){
+				//FowardB = 01
+				console.log("FowardB 01");
+				return true;
+		}
 		return false;
 	}
 
