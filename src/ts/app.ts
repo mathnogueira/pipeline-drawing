@@ -25,6 +25,7 @@ declare var angular: any;
 		vm.adicionarInstrucao = adicionarInstrucao;
 		vm.removerInstrucao = removerInstrucao;
 		vm.executar = executar;
+		vm.exportImage = exportImage;
 
 		vm.textInstructions = [];
 		vm.auxLatencias = [];
@@ -37,6 +38,7 @@ declare var angular: any;
 		let branchInstructions: Array<string> = ["beq", "bnez"];
 
 		let tipoInstrucao;
+		let canvas;
 
 		function init() {
 			// Pega as latencias
@@ -183,19 +185,10 @@ declare var angular: any;
 
 			return 1;
 		}
+
+		function exportImage() {
+			canvas.toImage();
+		}
 	}
-
-	// Inicializa o projeto quando a página estiver carregada.
-	// window.onload = init;
-	window["exportImage"] = exportImage;
-
-	let canvas;
-
-	function init() {
-		
-	}
-
-	function exportImage() {
-		canvas.toImage();
-	}
+	
 })();
