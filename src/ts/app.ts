@@ -23,12 +23,20 @@ declare var angular: any;
 		vm.aplicarLatencia = aplicarLatencia;
 		vm.exportJSON = exportJson;
 		vm.importJSON = importJson;
+		vm.adicionarInstrucao = adicionarInstrucao;
+		vm.removerInstrucao = removerInstrucao;
 
 		vm.textInstructions = [];
 		vm.auxLatencias = [];
 		vm.edicaoLatencia = [];
+		vm.instrucoes = [];
+		vm.operados = {};
 
 		init();
+		let memInstructions: Array<string> = ["ld", "sd", "lw", "sw"];
+		let branchInstructions: Array<string> = ["beq", "bnez"];
+
+		let tipoInstrucao;
 
 		function init() {
 			// Pega as latencias
@@ -39,6 +47,8 @@ declare var angular: any;
 					latencia: InstructionDelay[i]
 				});
 			}
+			vm.instrucaoAtual = "addd";
+			$scope.$watch(() => vm.instrucaoAtual, mostrarCampos);
 			vm.textInstructions = [
 				"add r1 r2 r3",
 				"subi r1 r1 3",
@@ -78,6 +88,60 @@ declare var angular: any;
 
 		function toggleConfig() {
 			vm.showConfig = !vm.showConfig;
+		}
+
+		function mostrarCampos(instrucao) {
+			if (instrucao === undefined) return;
+			// Reseta campos
+			vm.mostrarRt = false;
+			vm.mostrarRs = false;
+			vm.mostrarRd = false;
+			vm.mostrarDeslocamento = false;
+			vm.operandos = {};
+			console.log(instrucao);
+			if (memInstructions.indexOf(instrucao) >= 0) {
+				vm.mostrarRt = true;
+				vm.mostrarRs = true;
+				vm.mostrarDeslocamento = true;
+				tipoInstrucao = "mem";
+			} else if (branchInstructions.indexOf(instrucao) >= 0) {
+				vm.mostrarRs = true;
+				if (instrucao != "bnez")
+					vm.mostrarRt = true;
+				vm.mostrarDeslocamento = true;
+				tipoInstrucao = "branch";
+			} else {
+				vm.mostrarRt = true;
+				vm.mostrarRs = true;
+				vm.mostrarRd = true;
+				tipoInstrucao = "reg";
+			}
+		}
+
+		function adicionarInstrucao() {
+			console.log($scope.operandos);
+			if ($scope.operandos.$invalid) {
+				alert("Preencha todos os campos antes de adicionar uma instrução!");
+				return;
+			}
+			let texto = vm.instrucaoAtual;
+			if (tipoInstrucao == "mem") {
+				texto += ` ${vm.operandos.rt} ${vm.operandos.deslocamento}(${vm.operandos.rs})`;
+			} else if (tipoInstrucao == "branch") {
+				if (vm.instrucaoAtual == "beq")
+					texto += ` ${vm.operandos.rs} ${vm.operandos.rt} ${vm.operandos.deslocamento}`;
+				else
+					texto += ` ${vm.operandos.rs} ${vm.operandos.deslocamento}`;
+			} else {
+				texto += ` ${vm.operandos.rd} ${vm.operandos.rs} ${vm.operandos.rt}`;
+			}
+			
+			vm.instrucoes.push(texto);
+		}
+
+		function removerInstrucao(instrucao) {
+			let index = vm.instrucoes.indexOf(instrucao);
+			vm.instrucoes.splice(index, 1);
 		}
 
 		function drawPipeline() {
