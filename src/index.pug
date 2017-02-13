@@ -6,10 +6,13 @@ html(lang="pt-br", ng-app="app")
 
 		// build:css style/components.css
 		link(rel="stylesheet", href="../bower_components/bootstrap/dist/css/bootstrap.css")
+		link(rel="stylesheet", href="../bower_components/font-awesome/css/font-awesome.min.css")
 		// endbuild
 
 
+		// build:css style/app.css
 		link(rel="stylesheet", href="style/style.css")
+		// endbuild
 	body
 		.container-fluid
 			div(ng-controller="PipelineController as app")
@@ -23,8 +26,14 @@ html(lang="pt-br", ng-app="app")
 						.col-md-12
 							canvas#pipeline
 
+		// build:js js/components.js
 		script(src="../bower_components/fabric.js/dist/fabric.min.js")
 		script(src="../bower_components/systemjs/build/system.min.js")
 		script(src="../bower_components/angular/angular.min.js")
+		script(src="../bower_components/angular-bootstrap/ui-bootstrap.min.js")
+		script(src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js")
+		// endbuild
 
+		// build:js js/app.js
 		script(src="js/app.js")
+		// endbuild

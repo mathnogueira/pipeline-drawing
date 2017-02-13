@@ -55,7 +55,19 @@
 						tr(ng-repeat="instrucao in app.instrucoes")
 							td {{ instrucao.texto }}
 							td 
-								a(href="", ng-click="app.removerInstrucao(instrucao)") Remover
+								a.action-icon(
+									href="",
+									ng-click="app.removerInstrucao(instrucao)",
+									uib-tooltip="Remover",
+								)
+									i.fa.fa-trash
+								a.action-icon(
+									href="",
+									ng-click="app.mover(instrucao, 1)",
+									uib-tooltip="Mover para baixo",
+									ng-show="app.instrucoes.indexOf(instrucao) < (app.instrucoes.length - 1)"
+								)
+									i.fa.fa-arrow-down
 			.col-md-6
 				.col-md-4
 					.checkbox

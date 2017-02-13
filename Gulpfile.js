@@ -29,9 +29,10 @@
 	gulp.task("bundleTs", bundleTs);
 	gulp.task("bundle", bundle);
 	gulp.task("typescript", compilarTypescript);
+	gulp.task("copy-fonts", copyFonts);
 
 	function build() {
-		sequence("pug", "less", "typescript", "useref", "browserify");
+		sequence("pug", "less", "typescript", "useref", "browserify", "copy-fonts");
 	}
 
 	function compilarPug() {
@@ -117,6 +118,12 @@
 				transform: [["deamdify"]]
 			}))
 			.pipe(gulp.dest("build/js/"));
+	}
+
+	function copyFonts() {
+		return gulp
+			.src("bower_components/font-awesome/fonts/**/*")
+			.pipe(gulp.dest('dist/fonts/'));
 	}
 
 	function runBundle() {
