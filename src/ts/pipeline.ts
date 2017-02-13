@@ -24,6 +24,7 @@ export class Pipeline implements IUnit {
 	private freeExecuters: number;
 	private dispatchedInstructions: number;
 	private finishedInstructions: number;
+	private enableForward: boolean;
 
 	constructor(instructions?: Array<string>, adiantamento?: boolean) {
 		let objInstructions: Array<Instruction> = new Array<Instruction>();
@@ -38,6 +39,7 @@ export class Pipeline implements IUnit {
 		this.structureHazardDetector = new StructureHazardDetector(this.registers);
 		this.dataHazardDetector = new RegisterController();
 		this.executers = new Array<InstructionExecuter>();
+		this.enableForward = !!adiantamento;
 	}
 
 	/**
@@ -48,7 +50,7 @@ export class Pipeline implements IUnit {
 	tick() :void {
 		if (this.dispatchedInstructions < this.registers.INSTRUCTIONS.length) {
 			let executer: InstructionExecuter = 
-				new InstructionExecuter(this.dataHazardDetector, this.structureHazardDetector, this.registers);
+				new InstructionExecuter(this.dataHazardDetector, this.structureHazardDetector, this.registers, this.enableForward);
 			executer.setInstruction(this.registers.INSTRUCTIONS[this.dispatchedInstructions]);
 			this.registers.INSTRUCTIONS[this.dispatchedInstructions].dispatchedCycle = this.clock;
 			this.dispatchedInstructions++;

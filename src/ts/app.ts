@@ -149,7 +149,6 @@ declare var angular: any;
 		}
 
 		function drawPipeline() {
-			console.log(vm.adiantamento);
 			let pipelineExecutor = new Pipeline(vm.txtInstructions, vm.adiantamento);
 			let parsedInstructions = pipelineExecutor.run();
 			let maxCycles: number = 0;
@@ -159,7 +158,6 @@ declare var angular: any;
 					maxCycles = lastCycle;
 			}
 			let pipeline = new PipelineTableComponent(maxCycles, parsedInstructions.length);
-			console.log(pipeline);
 			canvas = new Canvas("pipeline", pipeline.width + 140, pipeline.height + 45);
 
 			for (let i: number = 0; i < parsedInstructions.length; i++) {
@@ -180,7 +178,6 @@ declare var angular: any;
 
 		function encontrarLatencia(nome) {
 			for (let i = 0; i < vm.latencias.length; i++) {
-				console.log(vm.latencias[i], nome);
 				if (vm.latencias[i].nome == nome)
 					return vm.latencias[i].latencia;
 			}

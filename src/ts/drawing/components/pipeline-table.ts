@@ -64,8 +64,6 @@ export class PipelineTableComponent extends Component {
 				wb: "wb"
 			};
 
-			console.log(instruction);
-
 			let order = ["if", "id", "ex", "mem", "wb"];
 		for (let key in instruction.execution) {
 			if (key != "stalls" && key != "unit") {

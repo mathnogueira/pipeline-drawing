@@ -14,11 +14,13 @@ export class InstructionExecuter {
 	private cyclesLeft: number = -1;
 	private rdReserved: string = null;
 	private unit: FunctionalUnit;
+	private forward: boolean;
 
-	constructor(regController: RegisterController, hazardDetector: StructureHazardDetector, pipelineRegisters?:PipelineRegisters) {
+	constructor(regController: RegisterController, hazardDetector: StructureHazardDetector, pipelineRegisters?:PipelineRegisters, forward?:boolean) {
 		this.regController = regController;
 		this.structureController = hazardDetector;
 		this.pipelineRegisters = pipelineRegisters;
+		this.forward = forward;
 		this.free = true;
 	}
 
@@ -97,12 +99,13 @@ export class InstructionExecuter {
 				let currentExecuter = this.regController.getExecutingInstruction(operant);
 				if (currentExecuter != this.currentInstruction && 
 					currentExecuter.dispatchedCycle < this.currentInstruction.dispatchedCycle) {
-				// if(operant != this.rdReserved) {
-					// Tem que soltar uma bolha ou tentar o adiantamento.
-					// ADIANTAMENTO:
-					// USAR O this.pipelineRegisters para verificar quais registradores
-					// estao em qual etapa da execucao. Aplicar o algoritmo do slide.
-					// bolha
+					// Verifica as condições de adiantamento, caso este recurso esteja disponível.
+					if (this.forward) {
+						let canForwardData = this.tryDataForward(operant);
+						if (canForwardData) {
+							continue;
+						}
+					}
 					throw new StallException("conflito de dados no " + operant);
 				}
 			}
@@ -112,6 +115,16 @@ export class InstructionExecuter {
 			this.regController.write(this.currentInstruction.detinationRegister, this.currentInstruction.delay + 1, this.currentInstruction);
 			this.rdReserved = this.currentInstruction.detinationRegister;
 		}
+	}
+
+	private tryDataForward(register): boolean {
+		// Eu sei que o codigo ta zuado, era so pra teste.
+		// Fazer verificação de adiantamento aqui!
+		if (this.pipelineRegisters.EX_MEM["rd"] == register)
+			return true;
+		if (this.pipelineRegisters.MEM_WB["rd"] == register)
+			return true;
+		return false;
 	}
 
 	haveFinished() {
