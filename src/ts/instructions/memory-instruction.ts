@@ -17,8 +17,10 @@ export class MemoryInstruction extends Instruction {
 		let operants = new Array<string>();
 		let rs = args[2].slice(args[2].indexOf("(") + 1).replace(")", "");
 		operants.push(rs);
-		operants.push(args[1]);
-
+		if (["ld", "lw"].indexOf(this.name) >= 0)
+			this.detinationRegister = args[1];
+		else 
+			operants.push(args[1]);
 		return operants;
 	}
 

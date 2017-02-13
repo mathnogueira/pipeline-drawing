@@ -117,9 +117,14 @@ export class InstructionExecuter {
 				}
 			}
 		}
+		this.currentInstruction.tick();
 		if (!this.rdReserved) {
 			// Reserva o rd por delay + 1 ciclos (ex + mem)
-			this.regController.write(this.currentInstruction.detinationRegister, this.currentInstruction.delay + 1, this.currentInstruction);
+			let delay = this.currentInstruction.delay + 1;
+			if (this.forward) {
+				delay -= 1;
+			}
+			this.regController.write(this.currentInstruction.detinationRegister, delay, this.currentInstruction);
 			this.rdReserved = this.currentInstruction.detinationRegister;
 		}
 	}
