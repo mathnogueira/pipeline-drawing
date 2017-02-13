@@ -80,6 +80,14 @@ export class InstructionExecuter {
 	}
 
 	executeInstruction() {
+		// Verifica se a instrucao pode escrever no rd.
+		let currentExecuter = this.regController.getExecutingInstruction(this.currentInstruction.detinationRegister);
+		if (!this.regController.isReadable(this.currentInstruction.detinationRegister) && 
+			currentExecuter != this.currentInstruction && 
+			currentExecuter.dispatchedCycle < this.currentInstruction.dispatchedCycle) {
+			console.log("STALL");	
+			throw new StallException("conflito de dados no " + this.currentInstruction.detinationRegister);
+		}
 		// tenta ler os operandos fonte
 		for (let i = 0; i < this.currentInstruction.operants.length; i++) {
 			let operant = this.currentInstruction.operants[i];

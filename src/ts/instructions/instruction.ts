@@ -70,6 +70,4 @@ export class InstructionDelay {
 	public static beq: number = 1;
 	public static bnez: number = 1;
 
-
-
 }

@@ -16,11 +16,12 @@ html(lang="pt-br", ng-app="app")
 				header.row
 					.col-md-12
 						include _partials/header.pug
-			section.row
-				.col-md-12
-					canvas#pipeline
-			footer
-				include _partials/footer.pug
+				.row(ng-show="app.executado")
+					footer
+						include _partials/footer.pug
+					section
+						.col-md-12
+							canvas#pipeline
 
 		script(src="../bower_components/fabric.js/dist/fabric.min.js")
 		script(src="../bower_components/systemjs/build/system.min.js")

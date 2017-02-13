@@ -53,7 +53,7 @@
 						th Ação
 					tbody
 						tr(ng-repeat="instrucao in app.instrucoes")
-							td {{ instrucao }}
+							td {{ instrucao.texto }}
 							td 
 								a(href="", ng-click="app.removerInstrucao(instrucao)") Remover
 			.col-md-6
@@ -63,7 +63,7 @@
 							input(type="checkbox", ng-model="app.adiamentamento", value="1")
 							|  Ativar adiantamento
 				.col-md-8
-					button.btn.btn-primary(ng-click="executar()") Executar
+					button.btn.btn-primary(ng-click="app.executar()", ng-disabled="app.instrucoes.length === 0") Executar
 			hr
 		
 .col-md-12

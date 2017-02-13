@@ -17,7 +17,6 @@ declare var angular: any;
 	function PipelineController($scope) {
 		let vm = this;
 
-		vm.draw = drawPipeline;
 		vm.toggleConfig = toggleConfig;
 		vm.editarLatencia = editarLatencia;
 		vm.aplicarLatencia = aplicarLatencia;
@@ -25,6 +24,7 @@ declare var angular: any;
 		vm.importJSON = importJson;
 		vm.adicionarInstrucao = adicionarInstrucao;
 		vm.removerInstrucao = removerInstrucao;
+		vm.executar = executar;
 
 		vm.textInstructions = [];
 		vm.auxLatencias = [];
@@ -49,19 +49,6 @@ declare var angular: any;
 			}
 			vm.instrucaoAtual = "addd";
 			$scope.$watch(() => vm.instrucaoAtual, mostrarCampos);
-			vm.textInstructions = [
-				"add r1 r2 r3",
-				"subi r1 r1 3",
-				"div r1 r6 r7",
-				"lw r6 0(r7)",
-				"subi r1 r1 1",
-				"mult r2 r2 r1",
-				"subi r1 r1 1",
-				"subi r1 r1 1",
-				"subi r1 r1 1",
-			];
-
-			drawPipeline();
 		}
 
 		function importJson() {
@@ -98,7 +85,6 @@ declare var angular: any;
 			vm.mostrarRd = false;
 			vm.mostrarDeslocamento = false;
 			vm.operandos = {};
-			console.log(instrucao);
 			if (memInstructions.indexOf(instrucao) >= 0) {
 				vm.mostrarRt = true;
 				vm.mostrarRs = true;
@@ -119,12 +105,11 @@ declare var angular: any;
 		}
 
 		function adicionarInstrucao() {
-			console.log($scope.operandos);
 			if ($scope.operandos.$invalid) {
 				alert("Preencha todos os campos antes de adicionar uma instrução!");
 				return;
 			}
-			let texto = vm.instrucaoAtual;
+			let texto = '' + vm.instrucaoAtual;
 			if (tipoInstrucao == "mem") {
 				texto += ` ${vm.operandos.rt} ${vm.operandos.deslocamento}(${vm.operandos.rs})`;
 			} else if (tipoInstrucao == "branch") {
@@ -136,7 +121,7 @@ declare var angular: any;
 				texto += ` ${vm.operandos.rd} ${vm.operandos.rs} ${vm.operandos.rt}`;
 			}
 			
-			vm.instrucoes.push(texto);
+			vm.instrucoes.push({ texto: texto });
 		}
 
 		function removerInstrucao(instrucao) {
@@ -144,8 +129,24 @@ declare var angular: any;
 			vm.instrucoes.splice(index, 1);
 		}
 
+		function executar() {
+			// Aplica as latencias
+			for (let i in InstructionDelay) {
+				InstructionDelay[i] = +encontrarLatencia(i);
+			}
+			vm.executado = true;
+			vm.txtInstructions = [];
+			for (let i = 0; i < vm.instrucoes.length; i++) {
+				vm.txtInstructions.push(vm.instrucoes[i].texto);
+			}
+			if (canvas && canvas.clear) {
+				canvas.clear();
+			}
+			drawPipeline();
+		}
+
 		function drawPipeline() {
-			let pipelineExecutor = new Pipeline(vm.textInstructions);
+			let pipelineExecutor = new Pipeline(vm.txtInstructions);
 			let parsedInstructions = pipelineExecutor.run();
 			let maxCycles: number = 0;
 			for (let i: number = 0; i < parsedInstructions.length; i++) {
@@ -154,12 +155,13 @@ declare var angular: any;
 					maxCycles = lastCycle;
 			}
 			let pipeline = new PipelineTableComponent(maxCycles, parsedInstructions.length);
+			console.log(pipeline);
 			canvas = new Canvas("pipeline", pipeline.width + 140, pipeline.height + 45);
 
 			for (let i: number = 0; i < parsedInstructions.length; i++) {
 				// Cria uma instrucao
 				let instruction = new Instruction({
-					instruction: vm.textInstructions[i],
+					instruction: vm.txtInstructions[i],
 					execution: parsedInstructions[i],
 					unit: "integer"
 				});
@@ -170,6 +172,16 @@ declare var angular: any;
 			canvas.initialize();
 			canvas.add(pipeline);
 			canvas.render();
+		}
+
+		function encontrarLatencia(nome) {
+			for (let i = 0; i < vm.latencias.length; i++) {
+				console.log(vm.latencias[i], nome);
+				if (vm.latencias[i].nome == nome)
+					return vm.latencias[i].latencia;
+			}
+
+			return 1;
 		}
 	}
 
