@@ -11,7 +11,7 @@ declare var angular: any;
 
 
 	angular
-		.module("app", [])
+		.module("app", ['ui.bootstrap'])
 		.controller("PipelineController", PipelineController);
 
 	function PipelineController($scope) {
@@ -26,6 +26,7 @@ declare var angular: any;
 		vm.removerInstrucao = removerInstrucao;
 		vm.executar = executar;
 		vm.exportImage = exportImage;
+		vm.mover = moverInstrucao;
 
 		vm.textInstructions = [];
 		vm.auxLatencias = [];
@@ -183,6 +184,14 @@ declare var angular: any;
 			}
 
 			return 1;
+		}
+
+		function moverInstrucao(instrucao, direcao) {
+			let index = vm.instrucoes.indexOf(instrucao);
+			let dest = index + direcao;
+			let aux = vm.instrucoes[dest];
+			vm.instrucoes[dest] = instrucao;
+			vm.instrucoes[index] = aux;
 		}
 
 		function exportImage() {

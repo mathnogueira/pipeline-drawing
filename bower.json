@@ -18,6 +18,8 @@
     "bootstrap": "^3.3.7",
     "fabric.js": "fabric#^1.7.3",
     "systemjs": "*",
-    "angular": "^1.6.2"
+    "angular": "^1.6.2",
+    "font-awesome": "^4.7.0",
+    "angular-bootstrap": "^2.5.0"
   }
 }
