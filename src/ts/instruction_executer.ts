@@ -39,7 +39,7 @@ export class InstructionExecuter {
 				this.currentInstruction.output["id"] = cycle;
 				this.unit = this.structureController.useStructure("id", 1);
 				this.currentInstruction.stage = EStage.EX;
-				break;
+				break;				
 			case EStage.EX:
 				if (this.cyclesLeft === -1) {
 					this.currentInstruction.output["ex"] = cycle;
@@ -94,9 +94,55 @@ export class InstructionExecuter {
 				// if(operant != this.rdReserved) {
 					// Tem que soltar uma bolha ou tentar o adiantamento.
 					// ADIANTAMENTO:
+					// 1. EX/MEM hazard:
+     				/*
+     							if (EX/MEM.RegWrite
+     							and (EX/MEM.RegisterRd != 0)
+     							and (EX/MEM.RegisterRd = ID/EX.RegisterRs))
+     								ForwardA = 10
+
+								if (EX/MEM.RegWrite
+								and (EX/MEM.RegisterRd != 0)
+								and (EX/MEM.RegisterRd = ID/EX.RegisterRt))
+									ForwardB = 10
+								
+						2. MEM/WB hazard:
+								If (MEM/WB.RegWrite
+								and (MEM/WB.RegisterRd != 0)
+								and (EX/MEM.RegRd != ID/EX.REgRs)
+								and (MEM/WB.RegisterRd = ID/EX.RegisterRs))
+									ForwardA = 01
+								if (MEM/WB.RegWrite
+								and (MEM/WB.RegisterRd != 0)
+								and (EX/MEM.RegRd != ID/EX.REgRt)
+								and (MEM/WB.RegisterRd = ID/EX.RegisterRt))
+									ForwardB = 01
+					*/
 					// USAR O this.pipelineRegisters para verificar quais registradores
 					// estao em qual etapa da execucao. Aplicar o algoritmo do slide.
 					// bolha
+					console.log("Registrador RD EX_MEM: "+ this.pipelineRegisters.EX_MEM["rd"]+ " Registrador RS ID_EX: "+ this.pipelineRegisters.ID_EX["rs"]+ " Registrador RT ID_EX: "+ this.pipelineRegisters.ID_EX["rt"]);
+					if(this.pipelineRegisters.EX_MEM["rd"] == this.pipelineRegisters.ID_EX["rs"] && this.pipelineRegisters.EX_MEM["rd"] !== undefined){
+							//FowardA = 10
+							console.log("ADIANTAMENTO: EX_MEM RD PRA ID_EX RS");
+					}
+					else if(this.pipelineRegisters.EX_MEM["rd"] == this.pipelineRegisters.ID_EX["rt"] && this.pipelineRegisters.EX_MEM["rd"] !== undefined){
+							//FowardB = 10
+							console.log("ADIANTAMENTO: EX_MEM RD PRA ID_EX RT");
+							
+					}
+					console.log("Registrador RD MEM_WB: "+ this.pipelineRegisters.MEM_WB["rd"]+ " Registrador RS ID_EX: "+ this.pipelineRegisters.ID_EX["rs"]+ " Registrador RT ID_EX: "+ this.pipelineRegisters.ID_EX["rt"]);
+					if(this.pipelineRegisters.EX_MEM["rd"] != this.pipelineRegisters.ID_EX["rs"] && this.pipelineRegisters.EX_MEM["rd"] == this.pipelineRegisters.ID_EX["rs"] && this.pipelineRegisters.MEM_WB["rd"] !== undefined){
+							//FowardA = 01
+							console.log("FowardA 01");
+							
+					}
+					else if(this.pipelineRegisters.EX_MEM["rd"] != this.pipelineRegisters.ID_EX["rt"] && this.pipelineRegisters.EX_MEM["rd"] == this.pipelineRegisters.ID_EX["rt"] && this.pipelineRegisters.MEM_WB["rd"] !== undefined){
+							//FowardB = 01
+							console.log("FowardB 01");
+							
+					}
+					
 					throw new StallException("conflito de dados no " + operant);
 				}
 			}
