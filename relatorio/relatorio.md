@@ -1,4 +1,4 @@
-# Arquitetura de Computadores II
+<center><h1>Arquitetura de Computadores II</h1></center>
 
 Trabalho desenvolvido pelos alunos:
 
@@ -12,10 +12,10 @@ ___
 
 Para instalar o programa, você tem 2 alternativas:
 
-1. Compilá-lo a partir do código fonte, para isso, basta seguir os passos descritos em ```Compilar código fonte```
+1. Compilá-lo a partir do código fonte, para isso, basta seguir os passos descritos em ```Compilando o código fonte```
 2. Utilizar a versão pré-compilada localizada na pasta ```dist```.
 
-## Compilar codigo fonte
+## Compilando o código fonte
 
 Para compilar o programa, você necessitará dos seguintes programs:
 - NodeJS
