@@ -38,30 +38,31 @@
 	\end{center}
 	
 	\begin{itemize}
-	\item Baixe e instale o \textbf{github}: 
-	\begin{lstlisting}[style=DOS]
-	 https://git-scm.com/downloads
-\end{lstlisting}
-	\item Após baixado, vá até uma pasta desejada e digite:
-	\begin{lstlisting}[style=DOS]
-	$ git clone https://github.com/mathnogueira/pipeline-drawing
-\end{lstlisting}
 	\item Agora vá na pipeline-drawning e digite para instalar(ubuntu):
-	\begin{lstlisting}[style=DOS]
-	$ sudo apt-get install nodejs
-	$ sudo apt-get install npm
-	$ sudo npm install bower -g
-\end{lstlisting}
+	\begin{enumerate}
+	\item nodejs
+	\item npm (NodeJS package manager): baixado automaticamente com o NodeJS
+	\item bower basta executar \textbf{sudo npm install bower -g}
+	\end{enumerate}
 	\item Caso a distribuição não seja o ubuntu, instale o nodejs, npm, bower.
-	\item Agora vá na pipeline-drawning e digite para instalar:
+	\item Agora vá até na pasta do projeto e execute:
 	\begin{lstlisting}[style=DOS]
+	$ npm install
+	$ bower install
 	$ gulp build
-	$ gulp pug
-	$ gulp less
-	$ gulp babel
 \end{lstlisting}
-	\item Agora vá na pasta build e clique no index.html
-	\item Caso queira colocar em um servidor http, basta colocar a pasta dist dentro do seu servidor.
+	\item Isso deverá gerar uma pasta chamada \textbf{dist} que irá conter a estrutura básica do programa
+	\begin{center}
+	\Large\textbf{Instalando o programa em um servidor FTP}
+	\end{center}
+	Para	utilizar	esse	programa	em	um	servidor	HTTP,	basta	você	copiar	a
+pasta	\textbf{dist}	para	a	sua	pasta	\textbf{www}.	Por	exemplo:	Digamos	que	você
+queira	criar	uma	subpasta	pipeline	em	seu	servidor	HTTP	local.	Basta
+executar	tal	comando:\\
+
+	\begin{center}
+		sudo cp -r ./dist	 /var/www/pipeline
+	\end{center}
 	\clearpage
 	\begin{center}
 	\Large\textbf{Execução de Entrada}
